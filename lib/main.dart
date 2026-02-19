@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart'; // Import your new screen
+import 'screens/responsive_home.dart';
+// Import your new screen
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
-      home: const WelcomeScreen(), // Set WelcomeScreen as the home
+      home: const ResponsiveHome(),
+ // Set WelcomeScreen as the home
       debugShowCheckedModeBanner: false, // Removes the 'Debug' banner
     );
   }
