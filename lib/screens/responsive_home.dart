@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import 'login_screen.dart';
 
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
@@ -9,6 +11,28 @@ class ResponsiveHome extends StatefulWidget {
 
 class _ResponsiveHomeState extends State<ResponsiveHome> {
   bool isVendor = false;
+  final _authService = AuthService();
+
+  Future<void> _logout() async {
+    try {
+      await _authService.logout();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error logging out: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +49,34 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         backgroundColor: Colors.deepOrange,
         centerTitle: true,
         elevation: 3,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _logout();
+                      },
+                      child: const Text('Logout'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       body: Padding(
@@ -48,9 +100,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isVendor
-                        ? "Vendor Dashboard 🔥"
-                        : "Customer Mode 😋",
+                    isVendor ? "Vendor Dashboard 🔥" : "Customer Mode 😋",
                     style: TextStyle(
                       fontSize: isTablet ? 30 : 22,
                       fontWeight: FontWeight.bold,
@@ -89,9 +139,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                             isVendor = value;
                           });
                         },
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -131,8 +181,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                   // ✅ Phone → List Layout
                   return ListView.separated(
                     itemCount: cards.length,
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(height: 14),
+                    separatorBuilder: (_, __) => const SizedBox(height: 14),
                     itemBuilder: (context, index) => cards[index],
                   );
                 },
@@ -172,18 +221,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: "Orders",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
@@ -197,47 +237,19 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         "Order Food",
         "Browse stalls & order instantly",
       ),
-      featureCard(
-        Icons.timer,
-        "Live Queue",
-        "Track your order in real-time",
-      ),
-      featureCard(
-        Icons.star,
-        "Top Vendors",
-        "Find best-rated street food",
-      ),
-      featureCard(
-        Icons.payment,
-        "Quick Pay",
-        "UPI & digital checkout",
-      ),
+      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
+      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
+      featureCard(Icons.payment, "Quick Pay", "UPI & digital checkout"),
     ];
   }
 
   // ✅ Vendor Features
   List<Widget> vendorCards() {
     return [
-      featureCard(
-        Icons.store,
-        "Manage Orders",
-        "Accept & prepare orders fast",
-      ),
-      featureCard(
-        Icons.dashboard,
-        "Dashboard",
-        "Monitor rush-hour sales",
-      ),
-      featureCard(
-        Icons.notifications,
-        "Alerts",
-        "Instant order notifications",
-      ),
-      featureCard(
-        Icons.analytics,
-        "Analytics",
-        "Track daily performance",
-      ),
+      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
+      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
+      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      featureCard(Icons.analytics, "Analytics", "Track daily performance"),
     ];
   }
 
@@ -250,11 +262,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.black12,
-            offset: Offset(2, 4),
-          ),
+          BoxShadow(blurRadius: 8, color: Colors.black12, offset: Offset(2, 4)),
         ],
       ),
       child: Row(
@@ -262,11 +270,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           CircleAvatar(
             radius: 26,
             backgroundColor: Colors.orange.shade100,
-            child: Icon(
-              icon,
-              color: Colors.deepOrange,
-              size: 28,
-            ),
+            child: Icon(icon, color: Colors.deepOrange, size: 28),
           ),
           const SizedBox(width: 16),
 
@@ -284,14 +288,11 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 const SizedBox(height: 6),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "207912333514",
+    "project_id": "streetbuzz-07",
+    "storage_bucket": "streetbuzz-07.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207912333514:android:48f1f1bee45718a4e90433",
+        "android_client_info": {
+          "package_name": "com.example.streetbuzz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_n1I2i6Nj76Hs8twQXLp8QTvbkCRgM3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
