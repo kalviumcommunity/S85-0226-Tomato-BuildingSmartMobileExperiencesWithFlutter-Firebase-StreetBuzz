@@ -5,7 +5,10 @@ class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
 
   @override
-  State<ResponsiveHome> createState() => _ResponsiveHomeState();
+  State<ResponsiveHome> createState() {
+    debugPrint('🏗️ ResponsiveHome: Creating state instance');
+    return _ResponsiveHomeState();
+  }
 }
 
 class _ResponsiveHomeState extends State<ResponsiveHome>
@@ -14,21 +17,44 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
   int selectedIndex = 0;
   final _authService = AuthService();
 
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('🚀 ResponsiveHome: Widget initialized - Mode: Customer');
+    debugPrint(
+      '📊 Initial State - isVendor: $isVendor, selectedIndex: $selectedIndex',
+    );
+  }
+
+  @override
+  void dispose() {
+    debugPrint('🗑️ ResponsiveHome: Widget disposed');
+    super.dispose();
+  }
+
   Future<void> _logout() async {
+    debugPrint('🔓 Logout initiated by user');
     await _authService.logout(); // ✅ Let StreamBuilder handle navigation
+    debugPrint('✅ Logout completed successfully');
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isTablet = screenWidth > 600;
+    debugPrint(
+      '🔄 ResponsiveHome: Widget rebuilding - Screen Width: ${screenWidth.toStringAsFixed(1)}px',
+    );
+    debugPrint(
+      '📱 Device Type: ${isTablet ? "Tablet" : "Mobile"} - Current Mode: ${isVendor ? "Vendor" : "Customer"}',
+    );
 
     return Scaffold(
-      backgroundColor: Colors.orange.shade50,
+      backgroundColor: Colors.purple.shade50,
 
       appBar: AppBar(
-        title: const Text("StreetBuzz 🍔"),
-        backgroundColor: Colors.deepOrange,
+        title: const Text("🔥 Hot Reload Demo - StreetBuzz 🍔"),
+        backgroundColor: Colors.purple,
         centerTitle: true,
         actions: [
           IconButton(
@@ -42,12 +68,16 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
 
       // ✅ Floating Action Button (Interactive)
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.purple,
         child: const Icon(Icons.flash_on),
         onPressed: () {
+          debugPrint('⚡ Flash Sale button pressed!');
+          debugPrint('💡 User triggered flash sale feature');
+          debugPrint('🧪 HOT RELOAD DEMO - Testing Debug Console');
+          debugPrint('📊 Current timestamp: ${DateTime.now()}');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("Flash Sale Activated ⚡"),
+              content: Text("Flash Sale Activated ⚡ - Hot Reload Demo!"),
             ),
           );
         },
@@ -78,8 +108,8 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
                   children: [
                     Text(
                       isVendor
-                          ? "Vendor Dashboard 🔥"
-                          : "Customer Mode 😋",
+                          ? "🛒 Vendor Dashboard 🔥"
+                          : "🎉 Testing Hot Reload - Customer Mode! 😋",
                       style: TextStyle(
                         fontSize: isTablet ? 30 : 22,
                         fontWeight: FontWeight.bold,
@@ -91,9 +121,18 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
                       value: isVendor,
                       activeColor: Colors.white,
                       onChanged: (value) {
+                        debugPrint(
+                          '🔄 Mode Switch Toggled: ${value ? "Vendor" : "Customer"} Mode',
+                        );
+                        debugPrint(
+                          '📝 Previous State: ${isVendor ? "Vendor" : "Customer"} → New State: ${value ? "Vendor" : "Customer"}',
+                        );
                         setState(() {
                           isVendor = value;
                         });
+                        debugPrint(
+                          '✅ State updated successfully - isVendor: $isVendor',
+                        );
                       },
                     ),
                   ],
@@ -115,8 +154,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    List<Widget> cards =
-                        isVendor ? vendorCards() : customerCards();
+                    List<Widget> cards = isVendor
+                        ? vendorCards()
+                        : customerCards();
 
                     if (isTablet) {
                       return GridView.count(
@@ -130,8 +170,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
 
                     return ListView.separated(
                       itemCount: cards.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(height: 14),
+                      separatorBuilder: (_, _) => const SizedBox(height: 14),
                       itemBuilder: (context, index) => cards[index],
                     );
                   },
@@ -147,9 +186,22 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
         currentIndex: selectedIndex,
         selectedItemColor: Colors.deepOrange,
         onTap: (index) {
+          String tabName = index == 0
+              ? "Home"
+              : index == 1
+              ? "Orders"
+              : "Profile";
+          debugPrint(
+            '🧭 Navigation: Tab switched from index $selectedIndex to $index',
+          );
+          debugPrint('📍 User navigated to: $tabName tab');
+
           setState(() {
             selectedIndex = index;
           });
+          debugPrint(
+            '✅ Navigation state updated - selectedIndex: $selectedIndex',
+          );
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -157,19 +209,16 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
                 index == 0
                     ? "Home Selected"
                     : index == 1
-                        ? "Orders Selected"
-                        : "Profile Selected",
+                    ? "Orders Selected"
+                    : "Profile Selected",
               ),
             ),
           );
         },
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.fastfood), label: "Orders"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
@@ -178,39 +227,38 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
   // 🔥 Customer Cards
   List<Widget> customerCards() {
     return [
-      featureCard(Icons.fastfood, "Order Food",
-          "Browse stalls & order instantly"),
-      featureCard(Icons.timer, "Live Queue",
-          "Track your order in real-time"),
-      featureCard(Icons.star, "Top Vendors",
-          "Find best-rated street food"),
-      featureCard(Icons.payment, "Quick Pay",
-          "UPI & digital checkout"),
+      featureCard(
+        Icons.fastfood,
+        "Order Food",
+        "Browse stalls & order instantly",
+      ),
+      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
+      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
+      featureCard(Icons.payment, "Quick Pay", "UPI & digital checkout"),
     ];
   }
 
   // 🔥 Vendor Cards
   List<Widget> vendorCards() {
     return [
-      featureCard(Icons.store, "Manage Orders",
-          "Accept & prepare orders fast"),
-      featureCard(Icons.dashboard, "Dashboard",
-          "Monitor rush-hour sales"),
-      featureCard(Icons.notifications, "Alerts",
-          "Instant order notifications"),
-      featureCard(Icons.analytics, "Analytics",
-          "Track daily performance"),
+      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
+      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
+      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      featureCard(Icons.analytics, "Analytics", "Track daily performance"),
     ];
   }
 
   // 🔥 Interactive Feature Card
-  Widget featureCard(
-      IconData icon, String title, String subtitle) {
+  Widget featureCard(IconData icon, String title, String subtitle) {
     return GestureDetector(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("$title Clicked 🚀")),
+        debugPrint('🎯 Feature Card Tapped: "$title"');
+        debugPrint(
+          '👤 User Action: Clicked on $title in ${isVendor ? "Vendor" : "Customer"} mode',
         );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("$title Clicked 🚀")));
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -220,9 +268,10 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
-                blurRadius: 8,
-                color: Colors.black12,
-                offset: Offset(2, 4)),
+              blurRadius: 8,
+              color: Colors.black12,
+              offset: Offset(2, 4),
+            ),
           ],
         ),
         child: Row(
@@ -230,27 +279,24 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
             CircleAvatar(
               radius: 26,
               backgroundColor: Colors.orange.shade100,
-              child: Icon(icon,
-                  color: Colors.deepOrange, size: 28),
+              child: Icon(icon, color: Colors.deepOrange, size: 28),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
                     style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                   ),
                 ],
               ),
