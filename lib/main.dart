@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/responsive_home.dart';
+import 'screens/scrollable_views.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
-      home: const AuthWrapper(),
+      // home: const AuthWrapper(),
+      home: ScrollableViews(),
       debugShowCheckedModeBanner: false,
     );
   }
