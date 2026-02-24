@@ -2,14 +2,23 @@ import 'screens/stateless_stateful_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
 import 'screens/login_screen.dart';
 import 'screens/responsive_home.dart';
+ feature/scrollable-views
 import 'screens/scrollable_views.dart';
+
+import 'screens/orders_screen.dart';
+import 'screens/profile_screen.dart';
+
+ main
 import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -20,13 +29,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StreetBuzz',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
+ feature/scrollable-views
       // home: const AuthWrapper(),
       home: ScrollableViews(),
       debugShowCheckedModeBanner: false,
+
+
+      // ✅ Named Routes Setup
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const AuthWrapper(),
+        '/home': (context) => const ResponsiveHome(),
+        '/orders': (context) => const OrdersScreen(),
+        '/profile': (context) => const ProfileScreen(),
+      },
+ main
     );
   }
 }
@@ -41,19 +63,18 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder(
       stream: authService.authStateChanges,
       builder: (context, snapshot) {
-        // Show loading while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
 
-        // If user is logged in, show home screen
         if (snapshot.hasData) {
           return const ResponsiveHome();
         }
 
-        // If user is not logged in, show login screen
         return const LoginScreen();
       },
     );

@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'login_screen.dart';
+import 'responsive_layout.dart';
 
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
 
   @override
-  State<ResponsiveHome> createState() => _ResponsiveHomeState();
+  State<ResponsiveHome> createState() {
+    debugPrint('🏗️ ResponsiveHome: Creating state instance');
+    return _ResponsiveHomeState();
+  }
 }
 
 class _ResponsiveHomeState extends State<ResponsiveHome> {
   bool isVendor = false;
+feature/stateless-stateful-demo
   bool isConfirmed = false;
 
+  int selectedIndex = 0;
+ main
   final _authService = AuthService();
 
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('🚀 ResponsiveHome initialized');
+  }
+
   Future<void> _logout() async {
-    try {
-      await _authService.logout();
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error logging out: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
+    debugPrint('🔓 Logout initiated');
+    await _authService.logout(); // StreamBuilder handles navigation
+    debugPrint('✅ Logout completed');
   }
 
   void confirmOrder() {
@@ -47,42 +44,38 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isTablet = screenWidth > 600;
 
+    debugPrint('🔄 Rebuilding UI → Mode: ${isVendor ? "Vendor" : "Customer"}');
+
     return Scaffold(
+ feature/stateless-stateful-demo
       backgroundColor: Colors.orange.shade50,
+
+      backgroundColor: Colors.purple.shade50,
+
+main
       appBar: AppBar(
-        title: const Text("StreetBuzz 🍔"),
-        backgroundColor: Colors.deepOrange,
+        title: const Text("🔥 Multi-Screen Navigation Demo"),
+        backgroundColor: Colors.purple,
         centerTitle: true,
-        elevation: 3,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Are you sure you want to logout?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _logout();
-                      },
-                      child: const Text('Logout'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
         ],
       ),
+feature/stateless-stateful-demo
+
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
+        child: const Icon(Icons.flash_on),
+        onPressed: () {
+          debugPrint('⚡ Flash Sale Pressed');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Flash Sale Activated ⚡")),
+          );
+        },
+      ),
+
+main
       body: Padding(
         padding: EdgeInsets.all(isTablet ? 28 : 16),
         child: Column(
@@ -103,13 +96,14 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isVendor ? "Vendor Dashboard 🔥" : "Customer Mode 😋",
+                    isVendor ? "🛒 Vendor Dashboard" : "🎉 Customer Mode",
                     style: TextStyle(
                       fontSize: isTablet ? 30 : 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
+feature/stateless-stateful-demo
                   const SizedBox(height: 8),
                   Text(
                     isVendor
@@ -141,12 +135,27 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                         },
                       ),
                     ],
+
+                  const SizedBox(height: 12),
+                  Switch(
+                    value: isVendor,
+                    activeColor: Colors.white,
+                    onChanged: (value) {
+                      debugPrint(
+                        '🔄 Mode Changed → ${value ? "Vendor" : "Customer"}',
+                      );
+                      setState(() {
+                        isVendor = value;
+                      });
+                    },
+main
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 25),
 
+feature/stateless-stateful-demo
             // Reactive Order Card
             Container(
               margin: const EdgeInsets.only(bottom: 20),
@@ -193,15 +202,16 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
             ),
 
             Text(
+
+            const Text(
+ main
               "Quick Features",
-              style: TextStyle(
-                fontSize: isTablet ? 24 : 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 15),
 
             Expanded(
+feature/stateless-stateful-demo
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   List<Widget> cards =
@@ -253,9 +263,40 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           ],
         ),
       ),
+
+              child: ListView(
+                children: isVendor ? vendorCards() : customerCards(),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // 🔥 UPDATED NAVIGATION LOGIC
+ main
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.deepOrange,
-        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          debugPrint('🧭 Navigation tapped → index: $index');
+
+          if (index == 0) {
+            // Home - just update index
+            setState(() {
+              selectedIndex = 0;
+            });
+          } else if (index == 1) {
+            // Orders Screen
+            Navigator.pushNamed(
+              context,
+              '/orders',
+              arguments: "Hello from StreetBuzz Home 🚀",
+            );
+          } else if (index == 2) {
+            // Profile Screen
+            Navigator.pushNamed(context, '/profile');
+          }
+        },
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.home), label: "Home"),
@@ -270,6 +311,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
   List<Widget> customerCards() {
     return [
+feature/stateless-stateful-demo
       featureCard(Icons.fastfood, "Order Food",
           "Browse stalls & order instantly"),
       featureCard(Icons.timer, "Live Queue",
@@ -278,11 +320,23 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           "Find best-rated street food"),
       featureCard(Icons.payment, "Quick Pay",
           "UPI & digital checkout"),
+
+      featureCard(
+        Icons.fastfood,
+        "Order Food",
+        "Browse stalls & order instantly",
+      ),
+      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
+      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
+      // Navigate to Responsive Layout Demo
+      _buildResponsiveLayoutCard(),
+ main
     ];
   }
 
   List<Widget> vendorCards() {
     return [
+ feature/stateless-stateful-demo
       featureCard(Icons.store, "Manage Orders",
           "Accept & prepare orders fast"),
       featureCard(Icons.dashboard, "Dashboard",
@@ -339,8 +393,65 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 ),
               ],
             ),
+
+      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
+      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
+      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      // Navigate to Responsive Layout Demo
+      _buildResponsiveLayoutCard(),
+    ];
+  }
+
+  // Special card to navigate to Responsive Layout Demo
+  Widget _buildResponsiveLayoutCard() {
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🎯 Navigating to Responsive Layout Demo');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ResponsiveLayout()),
+        );
+      },
+      child: Card(
+        elevation: 4,
+        color: Colors.purple.shade50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.purple.shade100,
+            child: const Icon(Icons.dashboard_customize, color: Colors.purple),
           ),
-        ],
+          title: const Text(
+            'Responsive Layout',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: const Text('View layout demo ➡️'),
+          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
+        ),
+      ),
+    );
+  }
+
+  Widget featureCard(IconData icon, String title, String subtitle) {
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🎯 Feature Clicked → $title');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("$title Clicked 🚀")));
+      },
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.orange.shade100,
+            child: Icon(icon, color: Colors.deepOrange),
+main
+          ),
+          title: Text(title),
+          subtitle: Text(subtitle),
+        ),
       ),
     );
   }
