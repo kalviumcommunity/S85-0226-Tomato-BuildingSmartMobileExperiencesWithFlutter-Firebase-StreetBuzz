@@ -1,17 +1,13 @@
-import 'screens/stateless_stateful_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'screens/login_screen.dart';
 import 'screens/responsive_home.dart';
- feature/scrollable-views
 import 'screens/scrollable_views.dart';
-
 import 'screens/orders_screen.dart';
 import 'screens/profile_screen.dart';
 
- main
 import 'services/auth_service.dart';
 
 void main() async {
@@ -34,21 +30,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
- feature/scrollable-views
-      // home: const AuthWrapper(),
-      home: ScrollableViews(),
-      debugShowCheckedModeBanner: false,
 
-
-      // ✅ Named Routes Setup
+      // 🔥 Keep only ONE entry point
       initialRoute: '/',
+
       routes: {
         '/': (context) => const AuthWrapper(),
         '/home': (context) => const ResponsiveHome(),
+        '/scroll': (context) => const ScrollableViews(),
         '/orders': (context) => const OrdersScreen(),
         '/profile': (context) => const ProfileScreen(),
       },
- main
     );
   }
 }
