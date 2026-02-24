@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'responsive_layout.dart';
 
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
@@ -33,8 +34,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isTablet = screenWidth > 600;
 
-    debugPrint(
-        '🔄 Rebuilding UI → Mode: ${isVendor ? "Vendor" : "Customer"}');
+    debugPrint('🔄 Rebuilding UI → Mode: ${isVendor ? "Vendor" : "Customer"}');
 
     return Scaffold(
       backgroundColor: Colors.purple.shade50,
@@ -44,10 +44,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         backgroundColor: Colors.purple,
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          ),
+          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
         ],
       ),
 
@@ -57,9 +54,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         onPressed: () {
           debugPrint('⚡ Flash Sale Pressed');
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Flash Sale Activated ⚡"),
-            ),
+            const SnackBar(content: Text("Flash Sale Activated ⚡")),
           );
         },
       ),
@@ -84,9 +79,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isVendor
-                        ? "🛒 Vendor Dashboard"
-                        : "🎉 Customer Mode",
+                    isVendor ? "🛒 Vendor Dashboard" : "🎉 Customer Mode",
                     style: TextStyle(
                       fontSize: isTablet ? 30 : 22,
                       fontWeight: FontWeight.bold,
@@ -99,7 +92,8 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                     activeColor: Colors.white,
                     onChanged: (value) {
                       debugPrint(
-                          '🔄 Mode Changed → ${value ? "Vendor" : "Customer"}');
+                        '🔄 Mode Changed → ${value ? "Vendor" : "Customer"}',
+                      );
                       setState(() {
                         isVendor = value;
                       });
@@ -113,18 +107,14 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
             const Text(
               "Quick Features",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 15),
 
             Expanded(
               child: ListView(
-                children:
-                    isVendor ? vendorCards() : customerCards(),
+                children: isVendor ? vendorCards() : customerCards(),
               ),
             ),
           ],
@@ -136,8 +126,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         currentIndex: selectedIndex,
         selectedItemColor: Colors.deepOrange,
         onTap: (index) {
-          debugPrint(
-              '🧭 Navigation tapped → index: $index');
+          debugPrint('🧭 Navigation tapped → index: $index');
 
           if (index == 0) {
             // Home - just update index
@@ -149,8 +138,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
             Navigator.pushNamed(
               context,
               '/orders',
-              arguments:
-                  "Hello from StreetBuzz Home 🚀",
+              arguments: "Hello from StreetBuzz Home 🚀",
             );
           } else if (index == 2) {
             // Profile Screen
@@ -158,12 +146,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           }
         },
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.fastfood), label: "Orders"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
@@ -171,48 +156,73 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
   List<Widget> customerCards() {
     return [
-      featureCard(Icons.fastfood, "Order Food",
-          "Browse stalls & order instantly"),
-      featureCard(Icons.timer, "Live Queue",
-          "Track your order in real-time"),
-      featureCard(Icons.star, "Top Vendors",
-          "Find best-rated street food"),
-      featureCard(Icons.payment, "Quick Pay",
-          "UPI & digital checkout"),
+      featureCard(
+        Icons.fastfood,
+        "Order Food",
+        "Browse stalls & order instantly",
+      ),
+      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
+      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
+      // Navigate to Responsive Layout Demo
+      _buildResponsiveLayoutCard(),
     ];
   }
 
   List<Widget> vendorCards() {
     return [
-      featureCard(Icons.store, "Manage Orders",
-          "Accept & prepare orders fast"),
-      featureCard(Icons.dashboard, "Dashboard",
-          "Monitor rush-hour sales"),
-      featureCard(Icons.notifications, "Alerts",
-          "Instant order notifications"),
-      featureCard(Icons.analytics, "Analytics",
-          "Track daily performance"),
+      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
+      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
+      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      // Navigate to Responsive Layout Demo
+      _buildResponsiveLayoutCard(),
     ];
   }
 
-  Widget featureCard(
-      IconData icon, String title, String subtitle) {
+  // Special card to navigate to Responsive Layout Demo
+  Widget _buildResponsiveLayoutCard() {
     return GestureDetector(
       onTap: () {
-        debugPrint('🎯 Feature Clicked → $title');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("$title Clicked 🚀")),
+        debugPrint('🎯 Navigating to Responsive Layout Demo');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ResponsiveLayout()),
         );
       },
       child: Card(
         elevation: 4,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        color: Colors.purple.shade50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.purple.shade100,
+            child: const Icon(Icons.dashboard_customize, color: Colors.purple),
+          ),
+          title: const Text(
+            'Responsive Layout',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: const Text('View layout demo ➡️'),
+          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
+        ),
+      ),
+    );
+  }
+
+  Widget featureCard(IconData icon, String title, String subtitle) {
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🎯 Feature Clicked → $title');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("$title Clicked 🚀")));
+      },
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Colors.orange.shade100,
-            child: Icon(icon,
-                color: Colors.deepOrange),
+            child: Icon(icon, color: Colors.deepOrange),
           ),
           title: Text(title),
           subtitle: Text(subtitle),

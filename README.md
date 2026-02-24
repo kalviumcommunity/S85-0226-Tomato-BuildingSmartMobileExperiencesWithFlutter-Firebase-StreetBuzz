@@ -398,6 +398,426 @@ fontSize: isTablet ? 30 : 22
 
 ---
 
+---
+
+## 📱 Sprint 2 Task 3.17: Responsive Layouts Using Rows, Columns, and Containers
+
+This section demonstrates the implementation of responsive layouts using Flutter's core layout widgets: **Container**, **Row**, and **Column**. The layout adapts seamlessly to different screen sizes (phones, tablets, and desktops).
+
+### 🎯 Overview
+
+Created a comprehensive **Responsive Layout Demo** that showcases:
+- Adaptive layouts for multiple screen sizes
+- Proper use of Container, Row, and Column widgets
+- MediaQuery for responsive design
+- Dynamic UI adjustments based on device type
+
+### 📂 Implementation
+
+**File Created**: [lib/screens/responsive_layout.dart](lib/screens/responsive_layout.dart)
+
+The responsive layout includes:
+
+1. **Header Section** - Full-width Container with gradient
+2. **Stats Row** - Horizontal layout with 3 stat cards
+3. **Main Content** - Adaptive grid (3-column → 2-column → 1-column)
+4. **Vendor Profiles** - Responsive cards
+5. **Footer** - Column-based layout
+
+---
+
+### 🧩 Core Widget Usage
+
+#### 1. **Container Widget**
+
+Containers are used for styling, padding, and positioning child widgets.
+
+**Example - Header Container:**
+```dart
+Container(
+  width: double.infinity,
+  height: isTablet ? 180 : 150,
+  padding: const EdgeInsets.all(20),
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      colors: [Colors.deepOrange, Colors.orange.shade300],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.orange.withOpacity(0.3),
+        blurRadius: 10,
+        offset: const Offset(0, 5),
+      ),
+    ],
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('StreetBuzz Dashboard'),
+      Text('Responsive Layout Demo'),
+    ],
+  ),
+);
+```
+
+**Key Features:**
+- ✅ Full-width responsive header
+- ✅ Gradient background
+- ✅ Shadow effects
+- ✅ Adaptive height based on screen size
+
+---
+
+#### 2. **Row Widget**
+
+Rows arrange widgets horizontally, perfect for side-by-side layouts.
+
+**Example - Stats Row:**
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Expanded(
+      child: _buildStatCard(
+        icon: Icons.shopping_bag,
+        title: 'Orders',
+        value: '234',
+        color: Colors.blue,
+      ),
+    ),
+    SizedBox(width: 12),
+    Expanded(
+      child: _buildStatCard(
+        icon: Icons.restaurant,
+        title: 'Vendors',
+        value: '45',
+        color: Colors.green,
+      ),
+    ),
+    SizedBox(width: 12),
+    Expanded(
+      child: _buildStatCard(
+        icon: Icons.people,
+        title: 'Customers',
+        value: '1.2K',
+        color: Colors.purple,
+      ),
+    ),
+  ],
+);
+```
+
+**Key Features:**
+- ✅ Equal spacing with `Expanded` widgets
+- ✅ Horizontal arrangement
+- ✅ Responsive card sizing
+- ✅ Gap control with `SizedBox`
+
+---
+
+#### 3. **Column Widget**
+
+Columns arrange widgets vertically, ideal for stacking content.
+
+**Example - Vertical Card Layout:**
+```dart
+Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      'Popular Items',
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    const SizedBox(height: 12),
+    _buildMenuItem('🍕 Pizza', '₹150'),
+    const SizedBox(height: 8),
+    _buildMenuItem('🍔 Burger', '₹120'),
+    const SizedBox(height: 8),
+    _buildMenuItem('🌮 Tacos', '₹100'),
+  ],
+);
+```
+
+**Key Features:**
+- ✅ Vertical stacking
+- ✅ Controlled spacing between items
+- ✅ Left-aligned content
+- ✅ Flexible item arrangement
+
+---
+
+### 📐 Responsive Design Strategy
+
+#### Using MediaQuery for Device Detection
+
+```dart
+double screenWidth = MediaQuery.of(context).size.width;
+bool isTablet = screenWidth > 600;
+bool isLargeScreen = screenWidth > 900;
+
+debugPrint('📐 Screen Width: ${screenWidth.toStringAsFixed(1)}px');
+debugPrint('📱 Device Type: ${isLargeScreen ? "Desktop" : isTablet ? "Tablet" : "Phone"}');
+```
+
+#### Adaptive Layout Logic
+
+**Phone (< 600px):**
+```dart
+// 1-column vertical layout
+Column(
+  children: [
+    _buildMenuCard('Popular Items'),
+    _buildMenuCard('Today\'s Special'),
+    _buildMenuCard('Trending'),
+  ],
+);
+```
+
+**Tablet (600px - 900px):**
+```dart
+// 2-column grid layout
+Column(
+  children: [
+    Row(
+      children: [
+        Expanded(child: _buildMenuCard('Popular Items')),
+        SizedBox(width: 16),
+        Expanded(child: _buildMenuCard('Today\'s Special')),
+      ],
+    ),
+    SizedBox(height: 16),
+    _buildMenuCard('Trending'),
+  ],
+);
+```
+
+**Desktop (> 900px):**
+```dart
+// 3-column grid layout
+Row(
+  children: [
+    Expanded(child: _buildMenuCard('Popular Items')),
+    SizedBox(width: 16),
+    Expanded(child: _buildMenuCard('Today\'s Special')),
+    SizedBox(width: 16),
+    Expanded(child: _buildMenuCard('Trending')),
+  ],
+);
+```
+
+---
+
+### 🎨 Layout Components
+
+#### Component 1: Stats Dashboard
+
+**Features:**
+- Horizontal Row of 3 cards
+- Adaptive sizing using `Expanded`
+- Different colors for visual distinction
+- Icons and numerical data display
+
+**Widgets Used:** `Row`, `Expanded`, `Container`, `Column`
+
+#### Component 2: Menu Cards Grid
+
+**Features:**
+- Adapts from 3-column → 2-column → 1-column
+- Maintains consistent spacing
+- Visual hierarchy with borders and shadows
+
+**Widgets Used:** `Row`, `Column`, `Container`, `Expanded`
+
+#### Component 3: Vendor Profiles
+
+**Features:**
+- Horizontal layout on tablets
+- Vertical stack on phones
+- Avatar, text, and icon combination
+
+**Widgets Used:** `Row`, `Column`, `CircleAvatar`, `Container`
+
+---
+
+### 🧪 Testing Different Screen Sizes
+
+#### How to Test:
+
+1. **Run on Chrome (Resizable Window):**
+   ```bash
+   flutter run -d chrome
+   ```
+   - Resize browser window to test different widths
+   - Watch layout adapt in real-time
+
+2. **Run on Windows Desktop:**
+   ```bash
+   flutter run -d windows
+   ```
+   - Resize application window
+   - Test large screen layout
+
+3. **Test with Device Preview (Optional):**
+   ```dart
+   // Add device_preview package to pubspec.yaml
+   flutter pub add device_preview
+   ```
+
+#### Expected Behavior:
+
+| Screen Size | Layout Pattern | Cards per Row |
+|------------|----------------|---------------|
+| **< 600px** (Phone) | Vertical Stack | 1 column |
+| **600-900px** (Tablet) | Mixed Grid | 2 columns |
+| **> 900px** (Desktop) | Full Grid | 3 columns |
+
+---
+
+### 📸 Screenshots
+
+#### Phone Layout (< 600px)
+*Vertical stacking with single-column design*
+- [ ] Add screenshot: `screenshots/phone_layout.png`
+
+#### Tablet Layout (600-900px)
+*Two-column responsive grid*
+- [ ] Add screenshot: `screenshots/tablet_layout.png`
+
+#### Desktop Layout (> 900px)
+*Three-column full grid layout*
+- [ ] Add screenshot: `screenshots/desktop_layout.png`
+
+---
+
+### 🔍 Code Highlights
+
+#### Adaptive Padding
+```dart
+padding: EdgeInsets.all(isTablet ? 24 : 16),
+```
+
+#### Responsive Font Sizes
+```dart
+fontSize: isTablet ? 32 : 24,
+```
+
+#### Dynamic Container Heights
+```dart
+height: isTablet ? 180 : 150,
+```
+
+#### Conditional Layouts
+```dart
+isTablet
+    ? Row(children: [...]) // Horizontal
+    : Column(children: [...]) // Vertical
+```
+
+---
+
+### 💡 Reflection
+
+#### **Why is responsiveness important in mobile apps?**
+
+Responsiveness ensures that apps provide an optimal user experience across all devices:
+
+1. **Device Diversity**: Users access apps on phones, tablets, foldables, and desktops - one-size-fits-all doesn't work
+2. **User Retention**: Poor layout on certain devices leads to app abandonment
+3. **Professional Appearance**: Responsive design shows attention to detail and quality
+4. **Content Readability**: Proper scaling ensures text is readable and UI elements are accessible
+5. **Market Reach**: Supporting multiple form factors expands your potential user base
+
+In StreetBuzz, vendors might use tablets for order management, while customers use phones - both need excellent experiences.
+
+#### **What challenges did you face while managing layout proportions?**
+
+1. **Widget Overflow**: Initial layouts caused overflow errors on small screens
+   - **Solution**: Used `Expanded`, `Flexible`, and `SingleChildScrollView` widgets
+
+2. **Inconsistent Spacing**: Gaps between elements looked different on various screens
+   - **Solution**: Created responsive spacing using ternary operators (`isTablet ? 24 : 16`)
+
+3. **Complex Nested Layouts**: Managing Row inside Column inside Container became confusing
+   - **Solution**: Extracted reusable widgets like `_buildStatCard()` and `_buildMenuCard()`
+
+4. **Maintaining Aspect Ratios**: Square cards on phones became rectangles on tablets
+   - **Solution**: Used calculated heights based on screen width
+
+5. **Testing Limitations**: Couldn't test on all physical devices
+   - **Solution**: Used Chrome browser resizing and MediaQuery debugging
+
+#### **How can you improve your layout for different screen orientations?**
+
+1. **Orientation Detection:**
+   ```dart
+   Orientation orientation = MediaQuery.of(context).orientation;
+   bool isPortrait = orientation == Orientation.portrait;
+   ```
+
+2. **Adaptive Grid Columns:**
+   - Portrait: 1-2 columns
+   - Landscape: 2-4 columns
+
+3. **Reflow Content:**
+   - Portrait: Vertical scrolling with stacked elements
+   - Landscape: Horizontal split-screen layout
+
+4. **Hide/Show Elements:**
+   - Hide less critical UI in landscape to maximize content
+   - Show navigation/sidebars in landscape mode
+
+5. **Responsive Images:**
+   - Use `FittedBox` and `AspectRatio` widgets
+   - Load different image sizes based on orientation
+
+6. **Future Implementation:**
+   ```dart
+   // Example orientation-aware layout
+   Widget build(BuildContext context) {
+     var orientation = MediaQuery.of(context).orientation;
+     return GridView.count(
+       crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+       children: [...],
+     );
+   }
+   ```
+
+---
+
+### 📚 Key Learnings
+
+| Widget | Best Use Case | Key Property |
+|--------|--------------|-------------|
+| **Container** | Styling, padding, sizing | `decoration`, `padding` |
+| **Row** | Horizontal layouts | `mainAxisAlignment` |
+| **Column** | Vertical stacking | `crossAxisAlignment` |
+| **Expanded** | Fill available space | `flex` |
+| **MediaQuery** | Screen info | `size.width`, `orientation` |
+| **LayoutBuilder** | Parent constraints | `constraints.maxWidth` |
+
+---
+
+### 🚀 How to Access the Demo
+
+1. **Run the StreetBuzz app**
+2. **Login or Sign Up**
+3. **On the home screen**, scroll down to find the **"Responsive Layout"** card (purple card)
+4. **Tap it** to navigate to the full responsive demo
+5. **Resize your window** (if on desktop/Chrome) to see layouts adapt in real-time
+
+---
+
+### 📦 Files Modified/Created
+
+- ✅ **Created**: `lib/screens/responsive_layout.dart` (Full responsive demo)
+- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ✅ **Updated**: `README.md` (This documentation)
+
+---
+
 ##  Future Enhancements
 
 - [ ] Add order placement functionality
