@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'responsive_layout.dart';
+import 'scrollable_views.dart';
 
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
@@ -64,7 +65,6 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             /// HEADER
             AnimatedContainer(
               duration: const Duration(milliseconds: 400),
@@ -132,10 +132,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 children: [
                   const Text(
                     "Order #102 - Paneer Roll",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -187,12 +184,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.fastfood), label: "Orders"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
@@ -201,29 +195,25 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
   /// CUSTOMER CARDS
   List<Widget> customerCards() {
     return [
-      featureCard(Icons.fastfood, "Order Food",
-          "Browse stalls & order instantly"),
-      featureCard(Icons.timer, "Live Queue",
-          "Track your order in real-time"),
-      featureCard(Icons.star, "Top Vendors",
-          "Find best-rated street food"),
-      featureCard(Icons.payment, "Quick Pay",
-          "UPI & digital checkout"),
+      featureCard(
+        Icons.fastfood,
+        "Order Food",
+        "Browse stalls & order instantly",
+      ),
+      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
+      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
       _buildResponsiveLayoutCard(),
+      _buildScrollableViewsCard(),
     ];
   }
 
   /// VENDOR CARDS
   List<Widget> vendorCards() {
     return [
-      featureCard(Icons.store, "Manage Orders",
-          "Accept & prepare orders fast"),
-      featureCard(Icons.dashboard, "Dashboard",
-          "Monitor rush-hour sales"),
-      featureCard(Icons.notifications, "Alerts",
-          "Instant order notifications"),
-      featureCard(Icons.analytics, "Analytics",
-          "Track daily performance"),
+      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
+      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
+      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      _buildScrollableViewsCard(),
     ];
   }
 
@@ -232,9 +222,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.orange.shade100,
@@ -243,9 +231,9 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         title: Text(title),
         subtitle: Text(subtitle),
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("$title Clicked 🚀")),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("$title Clicked 🚀")));
         },
       ),
     );
@@ -257,27 +245,51 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 12),
       color: Colors.purple.shade50,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.purple.shade100,
-          child: const Icon(Icons.dashboard_customize,
-              color: Colors.purple),
+          child: const Icon(Icons.dashboard_customize, color: Colors.purple),
         ),
         title: const Text(
           'Responsive Layout',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: const Text('View layout demo ➡️'),
-        trailing: const Icon(Icons.arrow_forward_ios,
-            color: Colors.purple),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => const ResponsiveLayout()),
+            MaterialPageRoute(builder: (context) => const ResponsiveLayout()),
+          );
+        },
+      ),
+    );
+  }
+
+  /// SCROLLABLE VIEWS CARD
+  Widget _buildScrollableViewsCard() {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 12),
+      color: Colors.teal.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.teal.shade100,
+          child: const Icon(Icons.view_list, color: Colors.teal),
+        ),
+        title: const Text(
+          'Scrollable Views',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: const Text('ListView & GridView demo ➡️'),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.teal),
+        onTap: () {
+          debugPrint('🎯 Navigating to Scrollable Views Demo');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ScrollableViews()),
           );
         },
       ),
