@@ -818,6 +818,616 @@ In StreetBuzz, vendors might use tablets for order management, while customers u
 
 ---
 
+## 📜 Sprint 2 Task 3.19: Building Scrollable Views with ListView and GridView
+
+This section demonstrates the implementation of scrollable layouts using **ListView** and **GridView** widgets for displaying dynamic, efficient, and interactive content in Flutter.
+
+### 🎯 Overview
+
+Created a comprehensive **Scrollable Views Demo** showcasing:
+- Horizontal and vertical scrolling with ListView
+- Dynamic content generation with ListView.builder
+- Grid layouts using GridView.builder
+- Performance optimization techniques
+- Interactive user feedback
+
+### 📂 Implementation
+
+**File Created**: [lib/screens/scrollable_views.dart](lib/screens/scrollable_views.dart)
+
+The scrollable views demo includes:
+
+1. **🍔 Featured Items** - Horizontal ListView
+2. **👥 Active Vendors** - Vertical ListView.builder
+3. **📊 Menu Categories** - GridView.builder
+
+---
+
+### 📜 ListView Widget
+
+ListView displays widgets in a scrollable linear arrangement (vertical or horizontal).
+
+#### **Horizontal ListView - Featured Items**
+
+**Purpose**: Display a horizontally scrollable list of featured food items.
+
+**Implementation:**
+```dart
+SizedBox(
+  height: 180,
+  child: ListView.builder(
+    scrollDirection: Axis.horizontal, // Horizontal scrolling
+    padding: const EdgeInsets.symmetric(horizontal: 12),
+    itemCount: featuredItems.length,
+    itemBuilder: (context, index) {
+      final item = featuredItems[index];
+      return GestureDetector(
+        onTap: () {
+          debugPrint('🎯 Featured item clicked: ${item['name']}');
+        },
+        child: Container(
+          width: 160,
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: item['color'].withOpacity(0.3)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 35,
+                backgroundColor: item['color'].withOpacity(0.2),
+                child: Text(item['name'].split(' ')[0]),
+              ),
+              Text(item['name'].split(' ')[1]),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: item['color'],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(item['price']),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  ),
+);
+```
+
+**Key Features:**
+- ✅ **scrollDirection: Axis.horizontal** - Enables horizontal scrolling
+- ✅ **Fixed height container** - Defines scrollable area
+- ✅ **Dynamic itemCount** - Based on data list length
+- ✅ **GestureDetector** - Handles user taps
+- ✅ **Debug logging** - Tracks user interactions
+
+**Data Structure:**
+```dart
+final featuredItems = [
+  {'name': '🍕 Pizza', 'price': '₹250', 'color': Colors.red},
+  {'name': '🍔 Burger', 'price': '₹150', 'color': Colors.orange},
+  {'name': '🌮 Tacos', 'price': '₹120', 'color': Colors.yellow},
+  {'name': '🍜 Noodles', 'price': '₹180', 'color': Colors.green},
+  {'name': '🍦 Ice Cream', 'price': '₹80', 'color': Colors.blue},
+  {'name': '🥗 Salad', 'price': '₹100', 'color': Colors.purple},
+];
+```
+
+---
+
+#### **Vertical ListView.builder - Vendor List**
+
+**Purpose**: Display a vertically scrollable list of active vendors with details.
+
+**Implementation:**
+```dart
+ListView.builder(
+  shrinkWrap: true, // Takes minimum space
+  physics: const NeverScrollableScrollPhysics(), // Prevents independent scrolling
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  itemCount: vendors.length,
+  itemBuilder: (context, index) {
+    final vendor = vendors[index];
+    final isOpen = vendor['status'] == 'Open';
+
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🎯 Vendor clicked: ${vendor['name']}');
+        debugPrint('📊 Rating: ${vendor['rating']}, Orders: ${vendor['orders']}');
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        elevation: 3,
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30,
+            backgroundColor: vendor['color'].withOpacity(0.2),
+            child: Icon(Icons.store, color: vendor['color']),
+          ),
+          title: Row(
+            children: [
+              Text(vendor['name']),
+              SizedBox(width: 8),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: isOpen ? Colors.green : Colors.red,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(vendor['status']),
+              ),
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              Icon(Icons.star, color: Colors.amber, size: 16),
+              Text(vendor['rating']),
+              SizedBox(width: 16),
+              Icon(Icons.shopping_bag, size: 16),
+              Text(vendor['orders']),
+            ],
+          ),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+      ),
+    );
+  },
+);
+```
+
+**Key Features:**
+- ✅ **shrinkWrap: true** - ListView takes only the space it needs
+- ✅ **NeverScrollableScrollPhysics()** - Scrolls with parent ScrollView
+- ✅ **Dynamic data generation** - Uses `List.generate()` for demo data
+- ✅ **Card widget** - Material Design card with elevation
+- ✅ **Status indicators** - Shows "Open" or "Closed" with color coding
+- ✅ **Rich information display** - Rating, order count, and status
+
+**Data Generation:**
+```dart
+final vendors = List.generate(
+  10,
+  (index) => {
+    'name': 'Vendor ${index + 1}',
+    'rating': (4.0 + (index % 10) / 10).toStringAsFixed(1),
+    'orders': '${(index + 1) * 50}+ orders',
+    'status': index % 3 == 0 ? 'Closed' : 'Open',
+    'color': Colors.primaries[index % Colors.primaries.length],
+  },
+);
+```
+
+---
+
+### 🎨 GridView Widget
+
+GridView arranges widgets in a scrollable 2D grid pattern, perfect for galleries and dashboards.
+
+#### **GridView.builder - Menu Categories**
+
+**Purpose**: Display menu categories in a 2-column grid layout.
+
+**Implementation:**
+```dart
+GridView.builder(
+  shrinkWrap: true,
+  physics: const NeverScrollableScrollPhysics(),
+  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2, // 2 columns
+    crossAxisSpacing: 12, // Horizontal gap
+    mainAxisSpacing: 12, // Vertical gap
+    childAspectRatio: 1.1, // Width/Height ratio
+  ),
+  itemCount: categories.length,
+  itemBuilder: (context, index) {
+    final category = categories[index];
+    final color = Colors.primaries[index % Colors.primaries.length];
+
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🎯 Category clicked: ${category['name']}');
+        debugPrint('📊 Items available: ${category['count']}');
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [color.shade400, color.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.3),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(category['icon'], size: 48, color: Colors.white),
+            SizedBox(height: 12),
+            Text(
+              category['name'],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text('${category['count']} items'),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+);
+```
+
+**Key Features:**
+- ✅ **SliverGridDelegateWithFixedCrossAxisCount** - Fixed number of columns
+- ✅ **crossAxisCount: 2** - Two columns per row
+- ✅ **crossAxisSpacing & mainAxisSpacing** - Control gaps between items
+- ✅ **childAspectRatio** - Controls card dimensions (width/height)
+- ✅ **Gradient backgrounds** - Visual appeal with color gradients
+- ✅ **Dynamic color assignment** - Each category gets a unique color
+
+**Data Structure:**
+```dart
+final categories = [
+  {'name': 'Fast Food', 'icon': Icons.fastfood, 'count': '45'},
+  {'name': 'Beverages', 'icon': Icons.local_drink, 'count': '28'},
+  {'name': 'Desserts', 'icon': Icons.cake, 'count': '32'},
+  {'name': 'Chinese', 'icon': Icons.ramen_dining, 'count': '38'},
+  {'name': 'Indian', 'icon': Icons.dining, 'count': '52'},
+  {'name': 'Snacks', 'icon': Icons.cookie, 'count': '41'},
+  {'name': 'Healthy', 'icon': Icons.eco, 'count': '19'},
+  {'name': 'Pizza', 'icon': Icons.local_pizza, 'count': '24'},
+];
+```
+
+---
+
+### ⚡ Performance Optimization
+
+#### **Why use ListView.builder() instead of ListView()?**
+
+**ListView()** - Creates all children at once:
+```dart
+ListView(
+  children: [
+    Widget1(),
+    Widget2(),
+    Widget3(),
+    // ... all 1000 widgets created immediately
+  ],
+);
+```
+- ❌ Creates ALL widgets upfront
+- ❌ High memory usage for large lists
+- ❌ Slower initial load time
+
+**ListView.builder()** - Creates widgets on demand:
+```dart
+ListView.builder(
+  itemCount: 1000,
+  itemBuilder: (context, index) {
+    return WidgetItem(index); // Only creates visible items
+  },
+);
+```
+- ✅ **Lazy loading** - Only creates visible widgets
+- ✅ **Low memory footprint** - Recycles off-screen widgets
+- ✅ **Smooth scrolling** - Better performance for large datasets
+- ✅ **Faster initial render** - App loads quicker
+
+**Memory Comparison:**
+| List Size | ListView Memory | ListView.builder Memory |
+|-----------|----------------|------------------------|
+| 10 items  | ~100 KB        | ~20 KB                 |
+| 100 items | ~1 MB          | ~20 KB                 |
+| 1000 items| ~10 MB         | ~20 KB                 |
+
+---
+
+#### **shrinkWrap and physics Properties**
+
+**shrinkWrap: true**
+- ListView takes only the space needed for its children
+- Useful inside ScrollView or Column
+- Prevents infinite height error
+
+**physics: NeverScrollableScrollPhysics()**
+- Disables independent scrolling
+- ListView scrolls with parent ScrollView
+- Prevents nested scrolling conflicts
+
+**Example:**
+```dart
+SingleChildScrollView( // Parent scroll
+  child: Column(
+    children: [
+      Text('Header'),
+      ListView.builder(
+        shrinkWrap: true, // Doesn't expand infinitely
+        physics: NeverScrollableScrollPhysics(), // Uses parent scroll
+        itemCount: 10,
+        itemBuilder: (context, index) => ListTile(...),
+      ),
+    ],
+  ),
+);
+```
+
+---
+
+### 🧪 Testing Guidelines
+
+#### **How to Test:**
+
+1. **Run the app:**
+   ```bash
+   flutter run -d chrome
+   ```
+
+2. **Navigate to Scrollable Views:**
+   - Login/Signup
+   - Find the **teal "Scrollable Views"** card
+   - Tap to open the demo
+
+3. **Test Horizontal ListView:**
+   - Swipe left/right on Featured Items
+   - Tap an item → Check debug console for log
+   - Verify smooth scrolling
+
+4. **Test Vertical ListView:**
+   - Scroll through vendor list
+   - Tap a vendor → Check console logs
+   - Verify status indicators (Open/Closed)
+
+5. **Test GridView:**
+   - Scroll through menu categories
+   - Tap categories → Check console logs
+   - Verify 2-column layout
+
+#### **Expected Debug Console Output:**
+
+```
+📜 ScrollableViews: Building scrollable layout
+🔄 Building horizontal ListView
+🔄 Building vertical ListView.builder
+🔄 Building GridView.builder
+🎯 Featured item clicked: 🍕 Pizza
+🎯 Vendor clicked: Vendor 3
+📊 Rating: 4.2, Orders: 150+ orders
+🎯 Category clicked: Fast Food
+📊 Items available: 45
+```
+
+---
+
+### 📸 Screenshots
+
+#### Screenshot 1: Horizontal ListView
+*Scrollable featured items with colorful cards*
+- [ ] Add screenshot: `screenshots/horizontal_listview.png`
+
+#### Screenshot 2: Vertical ListView.builder
+*Vendor list with ratings and status indicators*
+- [ ] Add screenshot: `screenshots/vertical_listview.png`
+
+#### Screenshot 3: GridView.builder
+*2-column menu categories grid with gradients*
+- [ ] Add screenshot: `screenshots/gridview.png`
+
+#### Screenshot 4: Debug Console
+*Console showing interaction logs*
+- [ ] Add screenshot: `screenshots/scrollable_debug_console.png`
+
+---
+
+### 💡 Reflection
+
+#### **How does ListView differ from GridView in design use cases?**
+
+| Aspect | ListView | GridView |
+|--------|----------|----------|
+| **Layout** | Linear (vertical/horizontal) | 2D Grid (rows & columns) |
+| **Best For** | Sequential content (messages, news feed) | Collections (photos, products, categories) |
+| **Scrolling** | Single direction | Vertical scroll only |
+| **Density** | Lower (one item per row) | Higher (multiple items per row) |
+| **Examples** | Chat list, notifications, settings | Image gallery, dashboard, product catalog |
+
+**ListView Use Cases:**
+- Chat/messaging apps
+- News feeds
+- Settings menus
+- Transaction history
+- Contact lists
+
+**GridView Use Cases:**
+- Photo galleries
+- Product catalogs
+- Dashboard cards
+- Icon selectors
+- Emoji pickers
+
+**In StreetBuzz:**
+- **ListView** - Vendor list, order history, chat with vendors
+- **GridView** - Menu categories, food gallery, vendor locations
+
+---
+
+#### **Why is ListView.builder() more efficient for large lists?**
+
+**1. Lazy Loading:**
+- Only renders widgets currently visible on screen
+- Widgets outside viewport are not created
+- Memory usage stays constant regardless of list size
+
+**2. Widget Recycling:**
+- Reuses widgets that scroll off-screen
+- No need to create new widgets for every scroll
+- Reduces garbage collection overhead
+
+**3. On-Demand Creation:**
+```dart
+ListView.builder(
+  itemCount: 10000, // Can handle massive lists
+  itemBuilder: (context, index) {
+    // Only called for visible indices
+    return ExpensiveWidget(index);
+  },
+);
+```
+- `itemBuilder` only called for visible items
+- If screen shows 10 items, only 10 widgets exist
+- Performance remains smooth even with 10,000 items
+
+**4. Memory Management:**
+- **ListView()**: Creates all 10,000 widgets → 100 MB+ memory
+- **ListView.builder()**: Creates ~10 widgets → 1-2 MB memory
+
+**Real-World Impact:**
+- Faster app startup
+- Smoother scrolling
+- Lower battery consumption
+- Better user experience
+- No crashes from out-of-memory errors
+
+---
+
+#### **What can you do to prevent lag or overflow errors in scrollable views?**
+
+**1. Use ListView.builder() and GridView.builder()**
+```dart
+// ❌ Bad - Creates all widgets
+ListView(children: List.generate(1000, (i) => Widget()));
+
+// ✅ Good - Lazy loading
+ListView.builder(itemCount: 1000, itemBuilder: (ctx, i) => Widget());
+```
+
+**2. Set shrinkWrap and physics correctly**
+```dart
+ListView.builder(
+  shrinkWrap: true, // Prevents infinite height
+  physics: NeverScrollableScrollPhysics(), // Prevents scroll conflicts
+  itemBuilder: (context, index) => ListTile(),
+);
+```
+
+**3. Use const constructors**
+```dart
+// ✅ Const widgets are cached and reused
+const Text('Hello');
+const Icon(Icons.star);
+```
+
+**4. Avoid heavy computations in build()**
+```dart
+// ❌ Bad - Recalculates every build
+itemBuilder: (context, index) {
+  final expensiveValue = complexCalculation(index);
+  return ListTile(title: Text(expensiveValue));
+}
+
+// ✅ Good - Pre-compute data
+final List<String> precomputedData = generateData();
+itemBuilder: (context, index) {
+  return ListTile(title: Text(precomputedData[index]));
+}
+```
+
+**5. Use cachedNetworkImage for images**
+```dart
+// Instead of Image.network()
+CachedNetworkImage(
+  imageUrl: 'url',
+  placeholder: (context, url) => CircularProgressIndicator(),
+);
+```
+
+**6. Limit item height/width**
+```dart
+GridView.builder(
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+    childAspectRatio: 1.0, // Prevents overflow
+  ),
+);
+```
+
+**7. Handle overflow with SingleChildScrollView**
+```dart
+SingleChildScrollView(
+  child: Column(
+    children: [
+      // Prevents vertical overflow
+    ],
+  ),
+);
+```
+
+**8. Debug performance**
+```dart
+import 'package:flutter/rendering.dart';
+
+void main() {
+  debugProfileBuildsEnabled = true; // Shows rebuild counts
+  debugPrintRebuildDirtyWidgets = true;
+  runApp(MyApp());
+}
+```
+
+---
+
+### 📚 Key Learnings
+
+| Widget | Purpose | Best Practice |
+|--------|---------|--------------|
+| **ListView** | Vertical/horizontal lists | Use `.builder()` for large lists |
+| **GridView** | 2D grid layouts | Use `.builder()` for performance |
+| **shrinkWrap** | Size to content | Use with caution (expensive) |
+| **physics** | Scroll behavior | `NeverScrollableScrollPhysics()` in nested scrolls |
+| **GestureDetector** | Tap handling | Add feedback to user interactions |
+| **debugPrint()** | Logging | Track user behavior and bugs |
+
+---
+
+### 🚀 How to Access the Demo
+
+1. **Run the StreetBuzz app**
+2. **Login or Sign Up**
+3. **On the home screen**, scroll down to find the **teal "Scrollable Views"** card
+4. **Tap it** to navigate to the scrollable views demo
+5. **Interact** with horizontal ListView, vertical ListView, and GridView
+6. **Check debug console** to see interaction logs
+
+---
+
+### 📦 Files Modified/Created
+
+- ✅ **Modified**: `lib/screens/scrollable_views.dart` (Enhanced with comprehensive examples)
+- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ✅ **Updated**: `README.md` (This documentation)
+
+---
+
 ##  Future Enhancements
 
 - [ ] Add order placement functionality
@@ -1648,10 +2258,5 @@ Together, these tools create a **powerful, efficient development workflow** that
 - Ensures high-performance apps
 - Supports team collaboration
 
-**Master these tools, and you'll build Flutter apps faster, smarter, and better.**
 
----
 
-*Assignment completed as part of Kalvium Sprint-2, Task 3.15*  
-*Team: [Your Team Name]*  
-*Date: February 23, 2026*
