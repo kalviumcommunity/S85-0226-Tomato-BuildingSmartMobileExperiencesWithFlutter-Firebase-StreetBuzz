@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
+import 'screens/user_input_form.dart';
 import 'screens/login_screen.dart';
 import 'screens/responsive_home.dart';
 import 'screens/scrollable_views.dart';
 import 'screens/orders_screen.dart';
 import 'screens/profile_screen.dart';
-
+import 'screens/welcome_screen.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -24,24 +24,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StreetBuzz',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
-      ),
+  title: 'StreetBuzz',
+  debugShowCheckedModeBanner: false,
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+    useMaterial3: true,
+  ),
 
-      // 🔥 Keep only ONE entry point
-      initialRoute: '/',
+  initialRoute: '/welcome',
 
-      routes: {
-        '/': (context) => const AuthWrapper(),
-        '/home': (context) => const ResponsiveHome(),
-        '/scroll': (context) => const ScrollableViews(),
-        '/orders': (context) => const OrdersScreen(),
-        '/profile': (context) => const ProfileScreen(),
-      },
-    );
+  routes: {
+    '/': (context) => const AuthWrapper(),
+    '/welcome': (context) => const WelcomeScreen(),
+    '/home': (context) => const ResponsiveHome(),
+    '/scroll': (context) => const ScrollableViews(),
+    '/orders': (context) => const OrdersScreen(),
+    '/profile': (context) => const ProfileScreen(),
+    '/form': (context) => const UserInputForm(),
+  },
+);
   }
 }
 
