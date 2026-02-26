@@ -4,6 +4,11 @@ import 'responsive_layout.dart';
 import 'scrollable_views.dart';
 import 'state_management_demo.dart';
 
+import '../widgets/custom_button.dart';
+import '../widgets/app_card.dart';
+import '../widgets/section_title.dart';
+import '../widgets/like_button.dart';
+
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
 
@@ -17,12 +22,6 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
   int selectedIndex = 0;
 
   final _authService = AuthService();
-
-  @override
-  void initState() {
-    super.initState();
-    debugPrint('🚀 ResponsiveHome initialized');
-  }
 
   Future<void> _logout() async {
     await _authService.logout();
@@ -43,7 +42,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
       backgroundColor: Colors.purple.shade50,
 
       appBar: AppBar(
-        title: const Text("🔥 Multi-Screen Navigation Demo"),
+        title: const Text("🔥 StreetBuzz Dashboard"),
         backgroundColor: Colors.purple,
         centerTitle: true,
         actions: [
@@ -66,7 +65,8 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// HEADER
+
+            /// ================= HEADER =================
             AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               padding: const EdgeInsets.all(22),
@@ -99,7 +99,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                       ),
                       Switch(
                         value: isVendor,
-                        activeColor: Colors.white,
+                        activeThumbColor: Colors.white,
                         onChanged: (value) {
                           setState(() {
                             isVendor = value;
@@ -114,7 +114,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
             const SizedBox(height: 20),
 
-            /// ORDER CARD
+            /// ================= ORDER CARD =================
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
@@ -133,20 +133,22 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                 children: [
                   const Text(
                     "Order #102 - Paneer Roll",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    isConfirmed ? "Status: Confirmed ✅" : "Status: Pending",
+                    isConfirmed
+                        ? "Status: Confirmed ✅"
+                        : "Status: Pending",
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 12),
-                  ElevatedButton(
+
+                  /// Using CustomButton
+                  CustomButton(
+                    label: "Confirm Order",
                     onPressed: confirmOrder,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
-                    ),
-                    child: const Text("Confirm Order"),
                   ),
                 ],
               ),
@@ -154,23 +156,21 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
             const SizedBox(height: 20),
 
-            const Text(
-              "Quick Features",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            /// ================= SECTION TITLE =================
+            const SectionTitle(title: "Quick Features"),
 
-            const SizedBox(height: 12),
-
-            /// FEATURE LIST
+            /// ================= FEATURE LIST =================
             Expanded(
               child: ListView(
-                children: isVendor ? vendorCards() : customerCards(),
+                children:
+                    isVendor ? vendorCards() : customerCards(),
               ),
             ),
           ],
         ),
       ),
 
+      /// ================= BOTTOM NAV =================
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         selectedItemColor: Colors.deepOrange,
@@ -185,148 +185,89 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.fastfood), label: "Orders"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
   }
 
-  /// CUSTOMER CARDS
+  /// ================= CUSTOMER CARDS =================
   List<Widget> customerCards() {
     return [
-      featureCard(
-        Icons.fastfood,
-        "Order Food",
-        "Browse stalls & order instantly",
+      AppCard(
+        title: "Order Food",
+        subtitle: "Browse stalls & order instantly",
+        icon: Icons.fastfood,
       ),
-      featureCard(Icons.timer, "Live Queue", "Track your order in real-time"),
-      featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
+      AppCard(
+        title: "Live Queue",
+        subtitle: "Track your order in real-time",
+        icon: Icons.timer,
+      ),
+      AppCard(
+        title: "Top Vendors",
+        subtitle: "Find best-rated street food",
+        icon: Icons.star,
+      ),
+      const LikeButton(),
       _buildResponsiveLayoutCard(),
       _buildScrollableViewsCard(),
       _buildStateManagementCard(),
     ];
   }
 
-  /// VENDOR CARDS
+  /// ================= VENDOR CARDS =================
   List<Widget> vendorCards() {
     return [
-      featureCard(Icons.store, "Manage Orders", "Accept & prepare orders fast"),
-      featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
-      featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
+      AppCard(
+        title: "Manage Orders",
+        subtitle: "Accept & prepare orders fast",
+        icon: Icons.store,
+      ),
+      AppCard(
+        title: "Dashboard",
+        subtitle: "Monitor rush-hour sales",
+        icon: Icons.dashboard,
+      ),
+      AppCard(
+        title: "Alerts",
+        subtitle: "Instant order notifications",
+        icon: Icons.notifications,
+      ),
+      const LikeButton(),
       _buildScrollableViewsCard(),
       _buildStateManagementCard(),
     ];
   }
 
-  /// FEATURE CARD
-  Widget featureCard(IconData icon, String title, String subtitle) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.orange.shade100,
-          child: Icon(icon, color: Colors.deepOrange),
-        ),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        onTap: () {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("$title Clicked 🚀")));
-        },
-      ),
-    );
-  }
+  /// ================= EXTRA NAV CARDS =================
 
-  /// RESPONSIVE LAYOUT CARD
   Widget _buildResponsiveLayoutCard() {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 12),
-      color: Colors.purple.shade50,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.purple.shade100,
-          child: const Icon(Icons.dashboard_customize, color: Colors.purple),
-        ),
-        title: const Text(
-          'Responsive Layout',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: const Text('View layout demo ➡️'),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ResponsiveLayout()),
-          );
-        },
-      ),
+    return AppCard(
+      title: "Responsive Layout",
+      subtitle: "View layout demo ➡️",
+      icon: Icons.dashboard_customize,
     );
   }
 
-  /// SCROLLABLE VIEWS CARD
   Widget _buildScrollableViewsCard() {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 12),
-      color: Colors.teal.shade50,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.teal.shade100,
-          child: const Icon(Icons.view_list, color: Colors.teal),
-        ),
-        title: const Text(
-          'Scrollable Views',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: const Text('ListView & GridView demo ➡️'),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.teal),
-        onTap: () {
-          debugPrint('🎯 Navigating to Scrollable Views Demo');
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ScrollableViews()),
-          );
-        },
-      ),
+    return AppCard(
+      title: "Scrollable Views",
+      subtitle: "ListView & GridView demo ➡️",
+      icon: Icons.view_list,
     );
   }
 
-  /// STATE MANAGEMENT CARD
   Widget _buildStateManagementCard() {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 12),
-      color: Colors.blue.shade50,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue.shade100,
-          child: const Icon(Icons.sync, color: Colors.blue),
-        ),
-        title: const Text(
-          'State Management',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: const Text('setState() demo ➡️'),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
-        onTap: () {
-          debugPrint('🎯 Navigating to State Management Demo');
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const StateManagementDemo(),
-            ),
-          );
-        },
-      ),
+    return AppCard(
+      title: "State Management",
+      subtitle: "setState() demo ➡️",
+      icon: Icons.sync,
     );
   }
 }
