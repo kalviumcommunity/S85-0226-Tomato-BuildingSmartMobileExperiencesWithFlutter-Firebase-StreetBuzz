@@ -22,7 +22,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
   bool _isVipMember = false;
   String _selectedCategory = 'All';
   double _rating = 3.0;
-  List<String> _orderHistory = ['Pizza', 'Burger', 'Tacos'];
+  final List<String> _orderHistory = ['Pizza', 'Burger', 'Tacos'];
 
   @override
   void initState() {
@@ -420,7 +420,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
               ),
               value: _isVipMember,
               onChanged: (value) => _toggleVipStatus(),
-              activeColor: Colors.amber.shade700,
+              activeThumbColor: Colors.amber.shade700,
             ),
           ],
         ),
