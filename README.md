@@ -2258,5 +2258,849 @@ Together, these tools create a **powerful, efficient development workflow** that
 - Ensures high-performance apps
 - Supports team collaboration
 
+---
 
+## 🔄 Sprint 2 Task 3.21: Managing Local UI State with setState
 
+This section demonstrates local state management in Flutter using the `setState()` method to create dynamic, interactive user interfaces that respond to user actions in real-time.
+
+### 🎯 Overview
+
+Created a comprehensive **State Management Demo** showcasing:
+- Counter with dynamic UI updates
+- Like button with conditional styling
+- VIP status toggle with theme changes
+- Category selector with chip selection
+- Rating slider with live feedback
+- Order history with list state management
+- Dark/Light theme toggle
+
+### 📂 Implementation
+
+**File Created**: [lib/screens/state_management_demo.dart](lib/screens/state_management_demo.dart)
+
+---
+
+### 🔍 Understanding Stateful vs Stateless Widgets
+
+#### **StatelessWidget**
+- **Definition**: Immutable widgets that don't change after being built
+- **Use Cases**: Static content, labels, icons, layout structures
+- **Example**: App logo, navigation bar, static text
+
+```dart
+class MyStaticWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text('This never changes');
+  }
+}
+```
+
+#### **StatefulWidget**
+- **Definition**: Mutable widgets that can rebuild with new data
+- **Use Cases**: Interactive components, forms, dynamic content
+- **Example**: Counter, toggle button, live data display
+
+```dart
+class MyDynamicWidget extends StatefulWidget {
+  @override
+  _MyDynamicWidgetState createState() => _MyDynamicWidgetState();
+}
+
+class _MyDynamicWidgetState extends State<MyDynamicWidget> {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Counter: $_counter'); // Updates when state changes
+  }
+}
+```
+
+**Analogy**:  
+- StatelessWidget = **Photograph** (fixed, unchanging)
+- StatefulWidget = **Live Camera Feed** (updates continuously)
+
+---
+
+### ⚙️ How setState() Works
+
+The `setState()` method is Flutter's core mechanism for updating the UI:
+
+1. **Triggers a rebuild** of the widget
+2. **Updates only affected widgets**, not the entire app
+3. **Preserves widget tree structure** for efficiency
+4. **Schedules a frame** for the next display refresh
+
+#### **Basic Syntax:**
+
+```dart
+void _incrementCounter() {
+  setState(() {
+    _counter++;  // Update state variable
+  });
+  // UI automatically rebuilds with new value
+}
+```
+
+#### **What Happens Internally:**
+
+```
+User Action → setState() Called → State Variable Updated → build() Called → UI Refreshed
+```
+
+---
+
+### 📝 Implementation Examples
+
+#### Example 1: Basic Counter
+
+```dart
+class _StateManagementDemoState extends State<StateManagementDemo> {
+  int _counter = 0;  // State variable
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+      debugPrint('➕ Counter incremented: $_counter');
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      if (_counter > 0) {
+        _counter--;
+        debugPrint('➖ Counter decremented: $_counter');
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('$_counter', style: TextStyle(fontSize: 48)),
+        ElevatedButton(
+          onPressed: _incrementCounter,
+          child: Text('Increment'),
+        ),
+        ElevatedButton(
+          onPressed: _decrementCounter,
+          child: Text('Decrement'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+**Key Points:**
+- ✅ State variable declared in State class
+- ✅ setState() wraps all state changes
+- ✅ Debug prints track state updates
+- ✅ UI updates automatically
+
+---
+
+#### Example 2: Conditional UI Based on State
+
+```dart
+int _likeCount = 0;
+bool isPopular = _likeCount >= 10;
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Icon(
+        Icons.favorite,
+        color: _likeCount > 0 ? Colors.red : Colors.grey,
+        size: 64,
+      ),
+      Text('$_likeCount Likes'),
+      if (isPopular)  // Conditional rendering
+        Container(
+          child: Text('POPULAR', style: TextStyle(color: Colors.white)),
+          color: Colors.amber,
+        ),
+      ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _likeCount++;
+          });
+        },
+        child: Text('Like'),
+      ),
+    ],
+  );
+}
+```
+
+**Features:**
+- Dynamic icon color based on state
+- Conditional widget rendering
+- Visual feedback for thresholds
+
+---
+
+#### Example 3: Toggle State (Boolean)
+
+```dart
+bool _isDarkMode = false;
+
+void _toggleTheme() {
+  setState(() {
+    _isDarkMode = !_isDarkMode;
+    debugPrint('🎨 Theme: ${_isDarkMode ? "Dark" : "Light"}');
+  });
+}
+
+Widget build(BuildContext context) {
+  Color bgColor = _isDarkMode ? Colors.grey.shade900 : Colors.grey.shade50;
+  Color textColor = _isDarkMode ? Colors.white : Colors.black87;
+
+  return Scaffold(
+    backgroundColor: bgColor,
+    appBar: AppBar(
+      title: Text('App', style: TextStyle(color: textColor)),
+      actions: [
+        IconButton(
+          icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
+          onPressed: _toggleTheme,
+        ),
+      ],
+    ),
+  );
+}
+```
+
+**Benefits:**
+- Toggle between two states
+- Entire theme changes dynamically
+- Icon updates based on current mode
+
+---
+
+#### Example 4: Selection State (String)
+
+```dart
+String _selectedCategory = 'All';
+List<String> categories = ['All', 'Pizza', 'Burgers', 'Desserts'];
+
+void _changeCategory(String category) {
+  setState(() {
+    _selectedCategory = category;
+    debugPrint('📂 Category: $category');
+  });
+}
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Text('Selected: $_selectedCategory'),
+      Wrap(
+        children: categories.map((category) {
+          bool isSelected = _selectedCategory == category;
+          return ChoiceChip(
+            label: Text(category),
+            selected: isSelected,
+            onSelected: (selected) => _changeCategory(category),
+            selectedColor: Colors.deepOrange,
+          );
+        }).toList(),
+      ),
+    ],
+  );
+}
+```
+
+---
+
+#### Example 5: Slider State (Double)
+
+```dart
+double _rating = 3.0;
+
+void _updateRating(double newRating) {
+  setState(() {
+    _rating = newRating;
+    debugPrint('⭐ Rating: $newRating');
+  });
+}
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Text('⭐ ${_rating.toStringAsFixed(1)} / 5.0'),
+      Slider(
+        value: _rating,
+        min: 0,
+        max: 5,
+        divisions: 10,
+        onChanged: _updateRating,
+      ),
+      Text(
+        _rating >= 4.5 ? '🌟 Excellent!' : 
+        _rating >= 3.5 ? '👍 Good' : 
+        _rating >= 2.5 ? '😐 Average' : '👎 Needs Improvement',
+      ),
+    ],
+  );
+}
+```
+
+---
+
+#### Example 6: List State Management
+
+```dart
+List<String> _orderHistory = ['Pizza', 'Burger'];
+int _orderCount = 2;
+
+void _addOrder(String item) {
+  setState(() {
+    _orderHistory.insert(0, item);  // Add to beginning
+    _orderCount++;
+    debugPrint('🛒 Added: $item (Total: $_orderCount)');
+  });
+}
+
+void _clearOrders() {
+  setState(() {
+    _orderHistory.clear();
+    _orderCount = 0;
+  });
+}
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Text('Total Orders: $_orderCount'),
+      ListView.builder(
+        itemCount: _orderHistory.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_orderHistory[index]),
+          );
+        },
+      ),
+      ElevatedButton(
+        onPressed: () => _addOrder('Tacos'),
+        child: Text('Add Order'),
+      ),
+    ],
+  );
+}
+```
+
+**Advanced Features:**
+- List manipulation (add, remove, clear)
+- Dynamic list rendering
+- Multiple state variables working together
+
+---
+
+### 🎨 State Management Features in Demo
+
+The demo includes 7 interactive sections:
+
+#### 1. **Basic Counter**
+- Increment/Decrement buttons
+- Reset functionality
+- Conditional styling (color changes based on value)
+- Motivational messages at thresholds
+
+#### 2. **Like Counter**
+- Heart icon that changes color
+- "POPULAR" badge appears at 10+ likes
+- Visual feedback for engagement
+
+#### 3. **VIP Toggle**
+- Switch between Regular and VIP member
+- Card background changes
+- Icon transforms
+- Benefits message updates
+
+#### 4. **Category Selection**
+- ChoiceChip widgets
+- Visual selection indicator
+- Category state tracking
+
+#### 5. **Rating Slider**
+- 0-5 star rating
+- Real-time value display
+- Contextual feedback messages
+- Visual rating indicator
+
+#### 6. **Order History**
+- Add orders dynamically
+- List state management
+- Clear all functionality
+- Quick-add buttons for common items
+
+#### 7. **State Summary**
+- Real-time display of all state variables
+- Comprehensive state overview
+- Debugging aid
+
+---
+
+### ⚠️ Common Mistakes to Avoid
+
+#### ❌ **Mistake 1: Modifying State Without setState()**
+
+```dart
+// WRONG ❌
+void _increment() {
+  _counter++;  // UI won't update!
+}
+
+// CORRECT ✅
+void _increment() {
+  setState(() {
+    _counter++;  // UI updates
+  });
+}
+```
+
+**Why**: Flutter doesn't know the state changed without `setState()`, so it won't rebuild the widget.
+
+---
+
+#### ❌ **Mistake 2: Calling setState() Inside build()**
+
+```dart
+// WRONG ❌
+Widget build(BuildContext context) {
+  setState(() {  // Infinite loop!
+    _counter++;
+  });
+  return Text('$_counter');
+}
+
+// CORRECT ✅
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Text('$_counter'),
+      ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _counter++;
+          });
+        },
+        child: Text('Increment'),
+      ),
+    ],
+  );
+}
+```
+
+**Why**: Calling `setState()` in `build()` causes an infinite rebuild loop (build → setState → build → ...)
+
+---
+
+#### ❌ **Mistake 3: Unnecessary Full Rebuilds**
+
+```dart
+// LESS EFFICIENT ❌
+class BigWidget extends StatefulWidget {
+  @override
+  _BigWidgetState createState() => _BigWidgetState();
+}
+
+class _BigWidgetState extends State<BigWidget> {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ExpensiveWidget(),  // Rebuilds every time!
+        Text('$_counter'),
+        ElevatedButton(onPressed: () => setState(() => _counter++)),
+      ],
+    );
+  }
+}
+
+// MORE EFFICIENT ✅
+class BigWidget extends StatefulWidget {
+  @override
+  _BigWidgetState createState() => _BigWidgetState();
+}
+
+class _BigWidgetState extends State<BigWidget> {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const ExpensiveWidget(),  // Won't rebuild (const)
+        CounterDisplay(counter: _counter),  // Only this rebuilds
+        ElevatedButton(onPressed: () => setState(() => _counter++)),
+      ],
+    );
+  }
+}
+```
+
+**Why**: Use `const` constructors and extract widgets to prevent unnecessary rebuilds.
+
+---
+
+#### ❌ **Mistake 4: Forgetting to Check State Before Updating**
+
+```dart
+// UNSAFE ❌
+void _decrement() {
+  setState(() {
+    _counter--;  // Could go negative!
+  });
+}
+
+// SAFE ✅
+void _decrement() {
+  setState(() {
+    if (_counter > 0) {
+      _counter--;
+    } else {
+      debugPrint('⚠️ Counter already at 0');
+    }
+  });
+}
+```
+
+---
+
+### 📊 State Management Best Practices
+
+#### 1. **Use Descriptive Variable Names**
+```dart
+// Bad
+int c = 0;
+
+// Good
+int _likeCount = 0;
+int _orderCount = 0;
+```
+
+#### 2. **Add Debug Logs**
+```dart
+setState(() {
+  _counter++;
+  debugPrint('Counter: $_counter');  // Track state changes
+});
+```
+
+#### 3. **Initialize State in initState()**
+```dart
+@override
+void initState() {
+  super.initState();
+  _counter = 0;
+  debugPrint('Widget initialized');
+}
+```
+
+#### 4. **Clean Up in dispose()**
+```dart
+@override
+void dispose() {
+  _controller.dispose();  // Clean up resources
+  debugPrint('Widget disposed');
+  super.dispose();
+}
+```
+
+#### 5. **Group Related State**
+```dart
+// Instead of multiple variables
+String userName;
+String userEmail;
+int userAge;
+
+// Consider using a model
+class User {
+  final String name;
+  final String email;
+  final int age;
+}
+
+User _user = User(name: 'John', email: 'john@email.com', age: 25);
+```
+
+---
+
+### 🧪 Testing the Demo
+
+#### How to Access:
+
+1. **Run the StreetBuzz app**
+2. **Login/Signup**
+3. **On the home screen**, find the **blue "State Management"** card
+4. **Tap it** to open the interactive demo
+
+#### What to Test:
+
+1. **Counter**: Increment/decrement/reset and watch color changes
+2. **Likes**: Click multiple times to reach "POPULAR" status
+3. **VIP Toggle**: Switch and see theme changes
+4. **Categories**: Select different categories
+5. **Rating**: Slide to see feedback messages
+6. **Orders**: Add items and watch the list grow
+7. **Theme**: Toggle dark/light mode in the app bar
+8. **State Summary**: View all current state values
+
+---
+
+### 📸 Screenshots
+
+#### Screenshot 1: Counter Demo
+*Basic counter with increment/decrement and dynamic styling*
+- [ ] Add screenshot: `screenshots/state_counter.png`
+
+#### Screenshot 2: VIP Toggle
+*VIP status toggle with theme changes*
+- [ ] Add screenshot: `screenshots/state_vip_toggle.png`
+
+#### Screenshot 3: Order History
+*Dynamic list with add/remove functionality*
+- [ ] Add screenshot: `screenshots/state_order_list.png`
+
+#### Screenshot 4: Dark Mode
+*Theme toggle showing dark mode*
+- [ ] Add screenshot: `screenshots/state_dark_mode.png`
+
+#### Screenshot 5: Debug Console
+*Console showing setState() logs*
+- [ ] Add screenshot: `screenshots/state_debug_logs.png`
+
+---
+
+### 💡 Reflection
+
+#### **What's the difference between Stateless and Stateful widgets?**
+
+| Feature | StatelessWidget | StatefulWidget |
+|---------|----------------|----------------|
+| **Mutability** | Immutable (never changes) | Mutable (can change) |
+| **State** | No internal state | Has internal state |
+| **Rebuild** | Only when parent rebuilds | Can rebuild itself with setState() |
+| **Use Cases** | Static UI, labels, icons | Interactive UI, forms, dynamic content |
+| **Performance** | Slightly faster (no state overhead) | Slightly slower (manages state) |
+| **Example** | App logo, static text | Counter, toggle, form input |
+
+**Key Insight**: Use StatelessWidget by default, and only switch to StatefulWidget when you need to manage changing data. This keeps your app performant and easier to reason about.
+
+---
+
+#### **Why is setState() important for Flutter's reactive model?**
+
+setState() is the **bridge between data and UI** in Flutter's reactive architecture:
+
+1. **Declarative UI**: Flutter's UI is a function of state (`UI = f(state)`)
+   - You don't manipulate widgets directly
+   - You change state, and Flutter rebuilds the UI
+
+2. **Efficient Updates**: setState() tells Flutter **exactly when** to rebuild
+   - Without it, Flutter wouldn't know data changed
+   - Prevents unnecessary rebuilds (better performance)
+
+3. **Automatic Optimization**: Flutter only rebuilds **affected parts** of the widget tree
+   - Not the entire app
+   - Uses widget diffing algorithm
+
+4. **Predictable Behavior**: State changes are **synchronous** and **atomic**
+   - Changes happen immediately
+   - UI stays consistent with data
+
+**Real-World Analogy**:  
+Think of setState() as a **notification bell** in an office:
+- Without it: People don't know when new information arrives (stale UI)
+- With it: Everyone gets notified instantly and can update their work (reactive UI)
+
+---
+
+#### **How can improper use of setState() affect performance?**
+
+**Performance Issues:**
+
+1. **Calling setState() Too Frequently**
+   ```dart
+   // BAD ❌ - Rebuilds 100 times
+   for (int i = 0; i < 100; i++) {
+     setState(() {
+       _counter++;
+     });
+   }
+   
+   // GOOD ✅ - Rebuilds once
+   setState(() {
+     for (int i = 0; i < 100; i++) {
+       _counter++;
+     }
+   });
+   ```
+   **Impact**: Frame drops, UI jank, battery drain
+
+2. **Rebuilding Large Widget Trees**
+   ```dart
+   // BAD ❌ - Entire tree rebuilds
+   class BigPage extends StatefulWidget {
+     @override
+     Widget build(BuildContext context) {
+       return Column(
+         children: [
+           Header(),
+           ExpensiveList(),  // 1000 items!
+           Footer(),
+         ],
+       );
+     }
+   }
+   
+   // GOOD ✅ - Extract stateful part
+   class BigPage extends StatelessWidget {
+     Widget build(BuildContext context) {
+       return Column(
+         children: [
+           const Header(),  // const = never rebuilds
+           const ExpensiveList(),
+           StatefulCounter(),  // Only this part is stateful
+         ],
+       );
+     }
+   }
+   ```
+   **Impact**: Slow rendering, lag during scrolling
+
+3. **setState() in Loops or Streams**
+   ```dart
+   // BAD ❌
+   Stream.periodic(Duration(milliseconds: 16)).listen((_) {
+     setState(() {
+       _counter++;
+     });
+   });  // 60 rebuilds per second!
+   
+   // GOOD ✅
+   Timer.periodic(Duration(seconds: 1), (_) {
+     setState(() {
+       _counter++;
+     });
+   });  // 1 rebuild per second
+   ```
+   **Impact**: CPU overuse, overheating, battery drain
+
+4. **Infinite Loops**
+   ```dart
+   // NEVER DO THIS ❌
+   Widget build(BuildContext context) {
+     setState(() {});  // INFINITE LOOP!
+     return Container();
+   }
+   ```
+   **Impact**: App freeze/crash
+
+**Optimization Tips:**
+- Use `const` constructors whenever possible
+- Extract stateful widgets to isolate rebuilds
+- Batch multiple state changes in one setState() call
+- Consider more advanced state management (Provider, Bloc) for complex apps
+- Profile with Flutter DevTools to identify bottlenecks
+
+---
+
+### 🔗 Widget Lifecycle with setState()
+
+```
+initState() → build() → User Action → setState() → build() → dispose()
+    ↑                                                    ↓
+    └─────────────────────────────────────────────────┘
+                    (Rebuild Loop)
+```
+
+**Lifecycle Methods:**
+
+```dart
+class _MyWidgetState extends State<MyWidget> {
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Called once when widget is created
+    debugPrint('Widget initialized');
+  }
+
+  @override
+  void didUpdateWidget(MyWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Called when parent rebuilds with new configuration
+    debugPrint('Widget updated');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Called every time setState() is called
+    debugPrint('Building widget');
+    return Text('$_counter');
+  }
+
+  @override
+  void dispose() {
+    // Called once when widget is removed
+    debugPrint('Widget disposed');
+    super.dispose();
+  }
+}
+```
+
+---
+
+### 📚 Key Takeaways
+
+| Concept | Key Point |
+|---------|-----------|
+| **StatefulWidget** | Use for interactive, changing UI |
+| **setState()** | Wraps all state changes to trigger rebuilds |
+| **State Variables** | Declare in State class, prefix with `_` |
+| **Performance** | Minimize rebuild scope, use `const` |
+| **Debugging** | Add debugPrint() to track state changes |
+| **Lifecycle** | Initialize in initState(), clean up in dispose() |
+
+---
+
+### 🚀 How to Access the Demo
+
+1. **Run the StreetBuzz app**
+2. **Login or Sign Up**
+3. **On the home screen**, find the **blue "State Management"** card
+4. **Tap it** to open the interactive setState() demo
+5. **Experiment** with all 7 sections to see state management in action
+
+---
+
+### 📦 Files Modified/Created
+
+- ✅ **Created**: `lib/screens/state_management_demo.dart` (Full setState() demonstrations)
+- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ✅ **Updated**: `README.md` (This comprehensive documentation)
+
+---
+
+### 🎯 Learning Outcomes
+
+After completing this demo, you can:
+- ✅ Distinguish between Stateful and Stateless widgets
+- ✅ Use setState() to manage local UI state
+- ✅ Create interactive, reactive user interfaces
+- ✅ Implement conditional UI based on state
+- ✅ Manage different types of state (int, bool, String, List, double)
+- ✅ Avoid common setState() pitfalls
+- ✅ Optimize widget rebuilds for performance
+- ✅ Debug state changes with logs
+
+---

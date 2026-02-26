@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'responsive_layout.dart';
 import 'scrollable_views.dart';
+import 'state_management_demo.dart';
 
 class ResponsiveHome extends StatefulWidget {
   const ResponsiveHome({super.key});
@@ -204,6 +205,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
       featureCard(Icons.star, "Top Vendors", "Find best-rated street food"),
       _buildResponsiveLayoutCard(),
       _buildScrollableViewsCard(),
+      _buildStateManagementCard(),
     ];
   }
 
@@ -214,6 +216,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
       featureCard(Icons.dashboard, "Dashboard", "Monitor rush-hour sales"),
       featureCard(Icons.notifications, "Alerts", "Instant order notifications"),
       _buildScrollableViewsCard(),
+      _buildStateManagementCard(),
     ];
   }
 
@@ -290,6 +293,37 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ScrollableViews()),
+          );
+        },
+      ),
+    );
+  }
+
+  /// STATE MANAGEMENT CARD
+  Widget _buildStateManagementCard() {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 12),
+      color: Colors.blue.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.shade100,
+          child: const Icon(Icons.sync, color: Colors.blue),
+        ),
+        title: const Text(
+          'State Management',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: const Text('setState() demo ➡️'),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+        onTap: () {
+          debugPrint('🎯 Navigating to State Management Demo');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StateManagementDemo(),
+            ),
           );
         },
       ),
