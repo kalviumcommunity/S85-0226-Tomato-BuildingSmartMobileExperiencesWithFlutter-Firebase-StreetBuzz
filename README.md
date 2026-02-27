@@ -1,6 +1,14 @@
-﻿# StreetBuzz 
+# StreetBuzz ??
 
 **StreetBuzz** is a real-time order management application designed for street food vendors and customers. This app helps vendors manage rush-hour queues efficiently while allowing customers to order digitally and skip long queues.
+
+---
+
+## ?? Sprint 2 Task 3.23: Responsive Design with MediaQuery and LayoutBuilder
+
+This sprint implements **responsive and adaptive UI design** using Flutter's `MediaQuery` and `LayoutBuilder` widgets, ensuring the app looks great on all screen sizes � from small phones to large tablets.
+
+---
 
 ##  Sprint 2 - Firebase Integration
 
@@ -400,11 +408,11 @@ fontSize: isTablet ? 30 : 22
 
 ---
 
-## 📱 Sprint 2 Task 3.17: Responsive Layouts Using Rows, Columns, and Containers
+## ?? Sprint 2 Task 3.17: Responsive Layouts Using Rows, Columns, and Containers
 
 This section demonstrates the implementation of responsive layouts using Flutter's core layout widgets: **Container**, **Row**, and **Column**. The layout adapts seamlessly to different screen sizes (phones, tablets, and desktops).
 
-### 🎯 Overview
+### ?? Overview
 
 Created a comprehensive **Responsive Layout Demo** that showcases:
 - Adaptive layouts for multiple screen sizes
@@ -412,7 +420,7 @@ Created a comprehensive **Responsive Layout Demo** that showcases:
 - MediaQuery for responsive design
 - Dynamic UI adjustments based on device type
 
-### 📂 Implementation
+### ?? Implementation
 
 **File Created**: [lib/screens/responsive_layout.dart](lib/screens/responsive_layout.dart)
 
@@ -420,13 +428,13 @@ The responsive layout includes:
 
 1. **Header Section** - Full-width Container with gradient
 2. **Stats Row** - Horizontal layout with 3 stat cards
-3. **Main Content** - Adaptive grid (3-column → 2-column → 1-column)
+3. **Main Content** - Adaptive grid (3-column ? 2-column ? 1-column)
 4. **Vendor Profiles** - Responsive cards
 5. **Footer** - Column-based layout
 
 ---
 
-### 🧩 Core Widget Usage
+### ?? Core Widget Usage
 
 #### 1. **Container Widget**
 
@@ -464,10 +472,10 @@ Container(
 ```
 
 **Key Features:**
-- ✅ Full-width responsive header
-- ✅ Gradient background
-- ✅ Shadow effects
-- ✅ Adaptive height based on screen size
+- ? Full-width responsive header
+- ? Gradient background
+- ? Shadow effects
+- ? Adaptive height based on screen size
 
 ---
 
@@ -511,10 +519,10 @@ Row(
 ```
 
 **Key Features:**
-- ✅ Equal spacing with `Expanded` widgets
-- ✅ Horizontal arrangement
-- ✅ Responsive card sizing
-- ✅ Gap control with `SizedBox`
+- ? Equal spacing with `Expanded` widgets
+- ? Horizontal arrangement
+- ? Responsive card sizing
+- ? Gap control with `SizedBox`
 
 ---
 
@@ -532,24 +540,24 @@ Column(
       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
     const SizedBox(height: 12),
-    _buildMenuItem('🍕 Pizza', '₹150'),
+    _buildMenuItem('?? Pizza', '?150'),
     const SizedBox(height: 8),
-    _buildMenuItem('🍔 Burger', '₹120'),
+    _buildMenuItem('?? Burger', '?120'),
     const SizedBox(height: 8),
-    _buildMenuItem('🌮 Tacos', '₹100'),
+    _buildMenuItem('?? Tacos', '?100'),
   ],
 );
 ```
 
 **Key Features:**
-- ✅ Vertical stacking
-- ✅ Controlled spacing between items
-- ✅ Left-aligned content
-- ✅ Flexible item arrangement
+- ? Vertical stacking
+- ? Controlled spacing between items
+- ? Left-aligned content
+- ? Flexible item arrangement
 
 ---
 
-### 📐 Responsive Design Strategy
+### ?? Responsive Design Strategy
 
 #### Using MediaQuery for Device Detection
 
@@ -558,8 +566,8 @@ double screenWidth = MediaQuery.of(context).size.width;
 bool isTablet = screenWidth > 600;
 bool isLargeScreen = screenWidth > 900;
 
-debugPrint('📐 Screen Width: ${screenWidth.toStringAsFixed(1)}px');
-debugPrint('📱 Device Type: ${isLargeScreen ? "Desktop" : isTablet ? "Tablet" : "Phone"}');
+debugPrint('?? Screen Width: ${screenWidth.toStringAsFixed(1)}px');
+debugPrint('?? Device Type: ${isLargeScreen ? "Desktop" : isTablet ? "Tablet" : "Phone"}');
 ```
 
 #### Adaptive Layout Logic
@@ -610,7 +618,7 @@ Row(
 
 ---
 
-### 🎨 Layout Components
+### ?? Layout Components
 
 #### Component 1: Stats Dashboard
 
@@ -625,7 +633,7 @@ Row(
 #### Component 2: Menu Cards Grid
 
 **Features:**
-- Adapts from 3-column → 2-column → 1-column
+- Adapts from 3-column ? 2-column ? 1-column
 - Maintains consistent spacing
 - Visual hierarchy with borders and shadows
 
@@ -642,7 +650,7 @@ Row(
 
 ---
 
-### 🧪 Testing Different Screen Sizes
+### ?? Testing Different Screen Sizes
 
 #### How to Test:
 
@@ -676,7 +684,7 @@ Row(
 
 ---
 
-### 📸 Screenshots
+### ?? Screenshots
 
 #### Phone Layout (< 600px)
 *Vertical stacking with single-column design*
@@ -692,7 +700,7 @@ Row(
 
 ---
 
-### 🔍 Code Highlights
+### ?? Code Highlights
 
 #### Adaptive Padding
 ```dart
@@ -718,7 +726,7 @@ isTablet
 
 ---
 
-### 💡 Reflection
+### ?? Reflection
 
 #### **Why is responsiveness important in mobile apps?**
 
@@ -787,7 +795,7 @@ In StreetBuzz, vendors might use tablets for order management, while customers u
 
 ---
 
-### 📚 Key Learnings
+### ?? Key Learnings
 
 | Widget | Best Use Case | Key Property |
 |--------|--------------|-------------|
@@ -800,7 +808,7 @@ In StreetBuzz, vendors might use tablets for order management, while customers u
 
 ---
 
-### 🚀 How to Access the Demo
+### ?? How to Access the Demo
 
 1. **Run the StreetBuzz app**
 2. **Login or Sign Up**
@@ -810,19 +818,19 @@ In StreetBuzz, vendors might use tablets for order management, while customers u
 
 ---
 
-### 📦 Files Modified/Created
+### ?? Files Modified/Created
 
-- ✅ **Created**: `lib/screens/responsive_layout.dart` (Full responsive demo)
-- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
-- ✅ **Updated**: `README.md` (This documentation)
+- ? **Created**: `lib/screens/responsive_layout.dart` (Full responsive demo)
+- ? **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ? **Updated**: `README.md` (This documentation)
 
 ---
 
-## 📜 Sprint 2 Task 3.19: Building Scrollable Views with ListView and GridView
+## ?? Sprint 2 Task 3.19: Building Scrollable Views with ListView and GridView
 
 This section demonstrates the implementation of scrollable layouts using **ListView** and **GridView** widgets for displaying dynamic, efficient, and interactive content in Flutter.
 
-### 🎯 Overview
+### ?? Overview
 
 Created a comprehensive **Scrollable Views Demo** showcasing:
 - Horizontal and vertical scrolling with ListView
@@ -831,19 +839,19 @@ Created a comprehensive **Scrollable Views Demo** showcasing:
 - Performance optimization techniques
 - Interactive user feedback
 
-### 📂 Implementation
+### ?? Implementation
 
 **File Created**: [lib/screens/scrollable_views.dart](lib/screens/scrollable_views.dart)
 
 The scrollable views demo includes:
 
-1. **🍔 Featured Items** - Horizontal ListView
-2. **👥 Active Vendors** - Vertical ListView.builder
-3. **📊 Menu Categories** - GridView.builder
+1. **?? Featured Items** - Horizontal ListView
+2. **?? Active Vendors** - Vertical ListView.builder
+3. **?? Menu Categories** - GridView.builder
 
 ---
 
-### 📜 ListView Widget
+### ?? ListView Widget
 
 ListView displays widgets in a scrollable linear arrangement (vertical or horizontal).
 
@@ -863,7 +871,7 @@ SizedBox(
       final item = featuredItems[index];
       return GestureDetector(
         onTap: () {
-          debugPrint('🎯 Featured item clicked: ${item['name']}');
+          debugPrint('?? Featured item clicked: ${item['name']}');
         },
         child: Container(
           width: 160,
@@ -900,21 +908,21 @@ SizedBox(
 ```
 
 **Key Features:**
-- ✅ **scrollDirection: Axis.horizontal** - Enables horizontal scrolling
-- ✅ **Fixed height container** - Defines scrollable area
-- ✅ **Dynamic itemCount** - Based on data list length
-- ✅ **GestureDetector** - Handles user taps
-- ✅ **Debug logging** - Tracks user interactions
+- ? **scrollDirection: Axis.horizontal** - Enables horizontal scrolling
+- ? **Fixed height container** - Defines scrollable area
+- ? **Dynamic itemCount** - Based on data list length
+- ? **GestureDetector** - Handles user taps
+- ? **Debug logging** - Tracks user interactions
 
 **Data Structure:**
 ```dart
 final featuredItems = [
-  {'name': '🍕 Pizza', 'price': '₹250', 'color': Colors.red},
-  {'name': '🍔 Burger', 'price': '₹150', 'color': Colors.orange},
-  {'name': '🌮 Tacos', 'price': '₹120', 'color': Colors.yellow},
-  {'name': '🍜 Noodles', 'price': '₹180', 'color': Colors.green},
-  {'name': '🍦 Ice Cream', 'price': '₹80', 'color': Colors.blue},
-  {'name': '🥗 Salad', 'price': '₹100', 'color': Colors.purple},
+  {'name': '?? Pizza', 'price': '?250', 'color': Colors.red},
+  {'name': '?? Burger', 'price': '?150', 'color': Colors.orange},
+  {'name': '?? Tacos', 'price': '?120', 'color': Colors.yellow},
+  {'name': '?? Noodles', 'price': '?180', 'color': Colors.green},
+  {'name': '?? Ice Cream', 'price': '?80', 'color': Colors.blue},
+  {'name': '?? Salad', 'price': '?100', 'color': Colors.purple},
 ];
 ```
 
@@ -937,8 +945,8 @@ ListView.builder(
 
     return GestureDetector(
       onTap: () {
-        debugPrint('🎯 Vendor clicked: ${vendor['name']}');
-        debugPrint('📊 Rating: ${vendor['rating']}, Orders: ${vendor['orders']}');
+        debugPrint('?? Vendor clicked: ${vendor['name']}');
+        debugPrint('?? Rating: ${vendor['rating']}, Orders: ${vendor['orders']}');
       },
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
@@ -981,12 +989,12 @@ ListView.builder(
 ```
 
 **Key Features:**
-- ✅ **shrinkWrap: true** - ListView takes only the space it needs
-- ✅ **NeverScrollableScrollPhysics()** - Scrolls with parent ScrollView
-- ✅ **Dynamic data generation** - Uses `List.generate()` for demo data
-- ✅ **Card widget** - Material Design card with elevation
-- ✅ **Status indicators** - Shows "Open" or "Closed" with color coding
-- ✅ **Rich information display** - Rating, order count, and status
+- ? **shrinkWrap: true** - ListView takes only the space it needs
+- ? **NeverScrollableScrollPhysics()** - Scrolls with parent ScrollView
+- ? **Dynamic data generation** - Uses `List.generate()` for demo data
+- ? **Card widget** - Material Design card with elevation
+- ? **Status indicators** - Shows "Open" or "Closed" with color coding
+- ? **Rich information display** - Rating, order count, and status
 
 **Data Generation:**
 ```dart
@@ -1004,7 +1012,7 @@ final vendors = List.generate(
 
 ---
 
-### 🎨 GridView Widget
+### ?? GridView Widget
 
 GridView arranges widgets in a scrollable 2D grid pattern, perfect for galleries and dashboards.
 
@@ -1030,8 +1038,8 @@ GridView.builder(
 
     return GestureDetector(
       onTap: () {
-        debugPrint('🎯 Category clicked: ${category['name']}');
-        debugPrint('📊 Items available: ${category['count']}');
+        debugPrint('?? Category clicked: ${category['name']}');
+        debugPrint('?? Items available: ${category['count']}');
       },
       child: Container(
         decoration: BoxDecoration(
@@ -1079,12 +1087,12 @@ GridView.builder(
 ```
 
 **Key Features:**
-- ✅ **SliverGridDelegateWithFixedCrossAxisCount** - Fixed number of columns
-- ✅ **crossAxisCount: 2** - Two columns per row
-- ✅ **crossAxisSpacing & mainAxisSpacing** - Control gaps between items
-- ✅ **childAspectRatio** - Controls card dimensions (width/height)
-- ✅ **Gradient backgrounds** - Visual appeal with color gradients
-- ✅ **Dynamic color assignment** - Each category gets a unique color
+- ? **SliverGridDelegateWithFixedCrossAxisCount** - Fixed number of columns
+- ? **crossAxisCount: 2** - Two columns per row
+- ? **crossAxisSpacing & mainAxisSpacing** - Control gaps between items
+- ? **childAspectRatio** - Controls card dimensions (width/height)
+- ? **Gradient backgrounds** - Visual appeal with color gradients
+- ? **Dynamic color assignment** - Each category gets a unique color
 
 **Data Structure:**
 ```dart
@@ -1102,7 +1110,7 @@ final categories = [
 
 ---
 
-### ⚡ Performance Optimization
+### ? Performance Optimization
 
 #### **Why use ListView.builder() instead of ListView()?**
 
@@ -1117,9 +1125,9 @@ ListView(
   ],
 );
 ```
-- ❌ Creates ALL widgets upfront
-- ❌ High memory usage for large lists
-- ❌ Slower initial load time
+- ? Creates ALL widgets upfront
+- ? High memory usage for large lists
+- ? Slower initial load time
 
 **ListView.builder()** - Creates widgets on demand:
 ```dart
@@ -1130,10 +1138,10 @@ ListView.builder(
   },
 );
 ```
-- ✅ **Lazy loading** - Only creates visible widgets
-- ✅ **Low memory footprint** - Recycles off-screen widgets
-- ✅ **Smooth scrolling** - Better performance for large datasets
-- ✅ **Faster initial render** - App loads quicker
+- ? **Lazy loading** - Only creates visible widgets
+- ? **Low memory footprint** - Recycles off-screen widgets
+- ? **Smooth scrolling** - Better performance for large datasets
+- ? **Faster initial render** - App loads quicker
 
 **Memory Comparison:**
 | List Size | ListView Memory | ListView.builder Memory |
@@ -1175,7 +1183,7 @@ SingleChildScrollView( // Parent scroll
 
 ---
 
-### 🧪 Testing Guidelines
+### ?? Testing Guidelines
 
 #### **How to Test:**
 
@@ -1191,36 +1199,36 @@ SingleChildScrollView( // Parent scroll
 
 3. **Test Horizontal ListView:**
    - Swipe left/right on Featured Items
-   - Tap an item → Check debug console for log
+   - Tap an item ? Check debug console for log
    - Verify smooth scrolling
 
 4. **Test Vertical ListView:**
    - Scroll through vendor list
-   - Tap a vendor → Check console logs
+   - Tap a vendor ? Check console logs
    - Verify status indicators (Open/Closed)
 
 5. **Test GridView:**
    - Scroll through menu categories
-   - Tap categories → Check console logs
+   - Tap categories ? Check console logs
    - Verify 2-column layout
 
 #### **Expected Debug Console Output:**
 
 ```
-📜 ScrollableViews: Building scrollable layout
-🔄 Building horizontal ListView
-🔄 Building vertical ListView.builder
-🔄 Building GridView.builder
-🎯 Featured item clicked: 🍕 Pizza
-🎯 Vendor clicked: Vendor 3
-📊 Rating: 4.2, Orders: 150+ orders
-🎯 Category clicked: Fast Food
-📊 Items available: 45
+?? ScrollableViews: Building scrollable layout
+?? Building horizontal ListView
+?? Building vertical ListView.builder
+?? Building GridView.builder
+?? Featured item clicked: ?? Pizza
+?? Vendor clicked: Vendor 3
+?? Rating: 4.2, Orders: 150+ orders
+?? Category clicked: Fast Food
+?? Items available: 45
 ```
 
 ---
 
-### 📸 Screenshots
+### ?? Screenshots
 
 #### Screenshot 1: Horizontal ListView
 *Scrollable featured items with colorful cards*
@@ -1240,7 +1248,7 @@ SingleChildScrollView( // Parent scroll
 
 ---
 
-### 💡 Reflection
+### ?? Reflection
 
 #### **How does ListView differ from GridView in design use cases?**
 
@@ -1299,8 +1307,8 @@ ListView.builder(
 - Performance remains smooth even with 10,000 items
 
 **4. Memory Management:**
-- **ListView()**: Creates all 10,000 widgets → 100 MB+ memory
-- **ListView.builder()**: Creates ~10 widgets → 1-2 MB memory
+- **ListView()**: Creates all 10,000 widgets ? 100 MB+ memory
+- **ListView.builder()**: Creates ~10 widgets ? 1-2 MB memory
 
 **Real-World Impact:**
 - Faster app startup
@@ -1315,10 +1323,10 @@ ListView.builder(
 
 **1. Use ListView.builder() and GridView.builder()**
 ```dart
-// ❌ Bad - Creates all widgets
+// ? Bad - Creates all widgets
 ListView(children: List.generate(1000, (i) => Widget()));
 
-// ✅ Good - Lazy loading
+// ? Good - Lazy loading
 ListView.builder(itemCount: 1000, itemBuilder: (ctx, i) => Widget());
 ```
 
@@ -1333,20 +1341,20 @@ ListView.builder(
 
 **3. Use const constructors**
 ```dart
-// ✅ Const widgets are cached and reused
+// ? Const widgets are cached and reused
 const Text('Hello');
 const Icon(Icons.star);
 ```
 
 **4. Avoid heavy computations in build()**
 ```dart
-// ❌ Bad - Recalculates every build
+// ? Bad - Recalculates every build
 itemBuilder: (context, index) {
   final expensiveValue = complexCalculation(index);
   return ListTile(title: Text(expensiveValue));
 }
 
-// ✅ Good - Pre-compute data
+// ? Good - Pre-compute data
 final List<String> precomputedData = generateData();
 itemBuilder: (context, index) {
   return ListTile(title: Text(precomputedData[index]));
@@ -1396,7 +1404,7 @@ void main() {
 
 ---
 
-### 📚 Key Learnings
+### ?? Key Learnings
 
 | Widget | Purpose | Best Practice |
 |--------|---------|--------------|
@@ -1409,7 +1417,7 @@ void main() {
 
 ---
 
-### 🚀 How to Access the Demo
+### ?? How to Access the Demo
 
 1. **Run the StreetBuzz app**
 2. **Login or Sign Up**
@@ -1420,11 +1428,11 @@ void main() {
 
 ---
 
-### 📦 Files Modified/Created
+### ?? Files Modified/Created
 
-- ✅ **Modified**: `lib/screens/scrollable_views.dart` (Enhanced with comprehensive examples)
-- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
-- ✅ **Updated**: `README.md` (This documentation)
+- ? **Modified**: `lib/screens/scrollable_views.dart` (Enhanced with comprehensive examples)
+- ? **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ? **Updated**: `README.md` (This documentation)
 
 ---
 
@@ -1464,7 +1472,7 @@ This project is created as part of Kalvium's Sprint-2 assignment.
 
 ---
 
-# 🚀 Sprint 2 - Task 3.15: Hot Reload, Debug Console, and Flutter DevTools
+# ?? Sprint 2 - Task 3.15: Hot Reload, Debug Console, and Flutter DevTools
 
 ## Overview
 
@@ -1477,7 +1485,7 @@ These tools form the foundation of an efficient Flutter development workflow, en
 
 ---
 
-## 🔥 Part 1: Hot Reload Feature
+## ?? Part 1: Hot Reload Feature
 
 ### What is Hot Reload?
 
@@ -1493,8 +1501,8 @@ Hot Reload allows you to instantly inject updated source code into a running Dar
 2. **Make changes to your code** (examples below)
 
 3. **Apply Hot Reload:**
-   - **VS Code**: Press `r` in the terminal, or click the ⚡ Hot Reload button
-   - **Android Studio**: Click the Hot Reload ⚡ icon in the toolbar
+   - **VS Code**: Press `r` in the terminal, or click the ? Hot Reload button
+   - **Android Studio**: Click the Hot Reload ? icon in the toolbar
    - **Shortcut**: Save the file (Ctrl+S / Cmd+S) with automatic hot reload enabled
 
 ### Hot Reload Demonstrated Changes
@@ -1503,7 +1511,7 @@ Hot Reload allows you to instantly inject updated source code into a running Dar
 **Before:**
 ```dart
 AppBar(
-  title: const Text("StreetBuzz 🍔"),
+  title: const Text("StreetBuzz ??"),
   backgroundColor: Colors.deepOrange,
 )
 ```
@@ -1511,7 +1519,7 @@ AppBar(
 **After:**
 ```dart
 AppBar(
-  title: const Text("StreetBuzz - Live Updates 🔥"),
+  title: const Text("StreetBuzz - Live Updates ??"),
   backgroundColor: Colors.orange,
 )
 ```
@@ -1524,7 +1532,7 @@ AppBar(
 **Before:**
 ```dart
 Text(
-  isVendor ? "Vendor Dashboard 🔥" : "Customer Mode 😋",
+  isVendor ? "Vendor Dashboard ??" : "Customer Mode ??",
   style: TextStyle(
     fontSize: isTablet ? 30 : 22,
     fontWeight: FontWeight.bold,
@@ -1536,7 +1544,7 @@ Text(
 **After:**
 ```dart
 Text(
-  isVendor ? "🔥 Vendor Hub - Manage Orders" : "😋 Browse & Order Food",
+  isVendor ? "?? Vendor Hub - Manage Orders" : "?? Browse & Order Food",
   style: TextStyle(
     fontSize: isTablet ? 32 : 24,
     fontWeight: FontWeight.bold,
@@ -1584,7 +1592,7 @@ For these cases, use **Hot Restart** (press `R` in the terminal or click the Hot
 
 ---
 
-## 🐛 Part 2: Debug Console Usage
+## ?? Part 2: Debug Console Usage
 
 ### What is the Debug Console?
 
@@ -1603,21 +1611,21 @@ I've added comprehensive `debugPrint()` statements throughout `responsive_home.d
 @override
 void initState() {
   super.initState();
-  debugPrint('🚀 ResponsiveHome: Widget initialized - Mode: Customer');
-  debugPrint('📊 Initial State - isVendor: $isVendor, selectedIndex: $selectedIndex');
+  debugPrint('?? ResponsiveHome: Widget initialized - Mode: Customer');
+  debugPrint('?? Initial State - isVendor: $isVendor, selectedIndex: $selectedIndex');
 }
 
 @override
 void dispose() {
-  debugPrint('🗑️ ResponsiveHome: Widget disposed');
+  debugPrint('??? ResponsiveHome: Widget disposed');
   super.dispose();
 }
 ```
 
 **Console Output:**
 ```
-🚀 ResponsiveHome: Widget initialized - Mode: Customer
-📊 Initial State - isVendor: false, selectedIndex: 0
+?? ResponsiveHome: Widget initialized - Mode: Customer
+?? Initial State - isVendor: false, selectedIndex: 0
 ```
 
 ---
@@ -1625,20 +1633,20 @@ void dispose() {
 #### State Change Monitoring
 ```dart
 onChanged: (value) {
-  debugPrint('🔄 Mode Switch Toggled: ${value ? "Vendor" : "Customer"} Mode');
-  debugPrint('📝 Previous State: ${isVendor ? "Vendor" : "Customer"} → New State: ${value ? "Vendor" : "Customer"}');
+  debugPrint('?? Mode Switch Toggled: ${value ? "Vendor" : "Customer"} Mode');
+  debugPrint('?? Previous State: ${isVendor ? "Vendor" : "Customer"} ? New State: ${value ? "Vendor" : "Customer"}');
   setState(() {
     isVendor = value;
   });
-  debugPrint('✅ State updated successfully - isVendor: $isVendor');
+  debugPrint('? State updated successfully - isVendor: $isVendor');
 }
 ```
 
 **Console Output:**
 ```
-🔄 Mode Switch Toggled: Vendor Mode
-📝 Previous State: Customer → New State: Vendor
-✅ State updated successfully - isVendor: true
+?? Mode Switch Toggled: Vendor Mode
+?? Previous State: Customer ? New State: Vendor
+? State updated successfully - isVendor: true
 ```
 
 ---
@@ -1647,21 +1655,21 @@ onChanged: (value) {
 ```dart
 onTap: (index) {
   String tabName = index == 0 ? "Home" : index == 1 ? "Orders" : "Profile";
-  debugPrint('🧭 Navigation: Tab switched from index $selectedIndex to $index');
-  debugPrint('📍 User navigated to: $tabName tab');
+  debugPrint('?? Navigation: Tab switched from index $selectedIndex to $index');
+  debugPrint('?? User navigated to: $tabName tab');
   
   setState(() {
     selectedIndex = index;
   });
-  debugPrint('✅ Navigation state updated - selectedIndex: $selectedIndex');
+  debugPrint('? Navigation state updated - selectedIndex: $selectedIndex');
 }
 ```
 
 **Console Output:**
 ```
-🧭 Navigation: Tab switched from index 0 to 1
-📍 User navigated to: Orders tab
-✅ Navigation state updated - selectedIndex: 1
+?? Navigation: Tab switched from index 0 to 1
+?? User navigated to: Orders tab
+? Navigation state updated - selectedIndex: 1
 ```
 
 ---
@@ -1669,18 +1677,18 @@ onTap: (index) {
 #### Feature Card Interaction Tracking
 ```dart
 onTap: () {
-  debugPrint('🎯 Feature Card Tapped: "$title"');
-  debugPrint('👤 User Action: Clicked on $title in ${isVendor ? "Vendor" : "Customer"} mode');
+  debugPrint('?? Feature Card Tapped: "$title"');
+  debugPrint('?? User Action: Clicked on $title in ${isVendor ? "Vendor" : "Customer"} mode');
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text("$title Clicked 🚀")),
+    SnackBar(content: Text("$title Clicked ??")),
   );
 }
 ```
 
 **Console Output:**
 ```
-🎯 Feature Card Tapped: "Order Food"
-👤 User Action: Clicked on Order Food in Customer mode
+?? Feature Card Tapped: "Order Food"
+?? User Action: Clicked on Order Food in Customer mode
 ```
 
 ---
@@ -1691,16 +1699,16 @@ onTap: () {
 Widget build(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
   bool isTablet = screenWidth > 600;
-  debugPrint('🔄 ResponsiveHome: Widget rebuilding - Screen Width: ${screenWidth.toStringAsFixed(1)}px');
-  debugPrint('📱 Device Type: ${isTablet ? "Tablet" : "Mobile"} - Current Mode: ${isVendor ? "Vendor" : "Customer"}');
+  debugPrint('?? ResponsiveHome: Widget rebuilding - Screen Width: ${screenWidth.toStringAsFixed(1)}px');
+  debugPrint('?? Device Type: ${isTablet ? "Tablet" : "Mobile"} - Current Mode: ${isVendor ? "Vendor" : "Customer"}');
   // ...
 }
 ```
 
 **Console Output:**
 ```
-🔄 ResponsiveHome: Widget rebuilding - Screen Width: 392.7px
-📱 Device Type: Mobile - Current Mode: Customer
+?? ResponsiveHome: Widget rebuilding - Screen Width: 392.7px
+?? Device Type: Mobile - Current Mode: Customer
 ```
 
 ---
@@ -1709,13 +1717,13 @@ Widget build(BuildContext context) {
 
 **Why use `debugPrint()` instead of `print()`?**
 
-✅ **debugPrint()** advantages:
+? **debugPrint()** advantages:
 - Automatically throttles output to prevent overwhelming the console
 - Wraps long lines automatically
 - Only prints in debug mode (stripped from release builds)
 - Better performance for logging
 
-❌ **print()** disadvantages:
+? **print()** disadvantages:
 - Output can be throttled by operating system
 - Long lines may be truncated
 - Remains in release builds (unless manually removed)
@@ -1726,7 +1734,7 @@ Widget build(BuildContext context) {
 
 **In VS Code:**
 1. Run your app using `flutter run`
-2. Open the Debug Console panel (View → Debug Console)
+2. Open the Debug Console panel (View ? Debug Console)
 3. All `debugPrint()` statements appear here in real-time
 
 **In Android Studio:**
@@ -1736,7 +1744,7 @@ Widget build(BuildContext context) {
 
 ---
 
-## 🛠️ Part 3: Flutter DevTools
+## ??? Part 3: Flutter DevTools
 
 ### What is Flutter DevTools?
 
@@ -1781,7 +1789,7 @@ Click the link to open DevTools.
 
 ### Key DevTools Features Demonstrated
 
-#### 1. Widget Inspector 🔍
+#### 1. Widget Inspector ??
 
 **Purpose**: Visualize the widget tree, inspect properties, and debug layout issues.
 
@@ -1808,20 +1816,20 @@ Click the link to open DevTools.
 **Example Inspection:**
 ```
 MaterialApp
- └─ Scaffold
-     ├─ AppBar
-     │   └─ Text("StreetBuzz 🍔")
-     ├─ FloatingActionButton
-     └─ Column
-         ├─ AnimatedContainer (Banner)
-         │   ├─ Text("Customer Mode 😋")
-         │   └─ Switch
-         └─ GridView / ListView (Feature Cards)
+ +- Scaffold
+     +- AppBar
+     �   +- Text("StreetBuzz ??")
+     +- FloatingActionButton
+     +- Column
+         +- AnimatedContainer (Banner)
+         �   +- Text("Customer Mode ??")
+         �   +- Switch
+         +- GridView / ListView (Feature Cards)
 ```
 
 ---
 
-#### 2. Performance View ⚡
+#### 2. Performance View ?
 
 **Purpose**: Analyze frame rendering times and identify performance bottlenecks.
 
@@ -1851,7 +1859,7 @@ MaterialApp
 
 ---
 
-#### 3. Memory View 💾
+#### 3. Memory View ??
 
 **Purpose**: Track memory allocation and identify memory leaks.
 
@@ -1875,7 +1883,7 @@ MaterialApp
 
 ---
 
-#### 4. Network View 🌐
+#### 4. Network View ??
 
 **Purpose**: Monitor HTTP requests and Firebase calls.
 
@@ -1892,7 +1900,7 @@ MaterialApp
 
 ---
 
-#### 5. Logging View 📋
+#### 5. Logging View ??
 
 **Purpose**: Advanced log filtering and analysis.
 
@@ -1910,15 +1918,15 @@ MaterialApp
 
 **Example Logs from StreetBuzz:**
 ```
-[log] 🚀 ResponsiveHome: Widget initialized - Mode: Customer
-[log] 📊 Initial State - isVendor: false, selectedIndex: 0
-[log] 🔄 Mode Switch Toggled: Vendor Mode
-[log] ✅ State updated successfully - isVendor: true
+[log] ?? ResponsiveHome: Widget initialized - Mode: Customer
+[log] ?? Initial State - isVendor: false, selectedIndex: 0
+[log] ?? Mode Switch Toggled: Vendor Mode
+[log] ? State updated successfully - isVendor: true
 ```
 
 ---
 
-## 📸 Screenshots
+## ?? Screenshots
 
 ### Hot Reload Demonstration
 > **Screenshot 1**: App before code change
@@ -1963,7 +1971,7 @@ MaterialApp
 
 ---
 
-## 🎯 Integrated Workflow Demonstration
+## ?? Integrated Workflow Demonstration
 
 ### Step-by-Step Workflow
 
@@ -1973,16 +1981,16 @@ MaterialApp
    ```
    *Debug Console shows:*
    ```
-   🚀 ResponsiveHome: Widget initialized - Mode: Customer
-   📊 Initial State - isVendor: false, selectedIndex: 0
+   ?? ResponsiveHome: Widget initialized - Mode: Customer
+   ?? Initial State - isVendor: false, selectedIndex: 0
    ```
 
 2. **Toggle Vendor Mode**
    *Debug Console shows:*
    ```
-   🔄 Mode Switch Toggled: Vendor Mode
-   📝 Previous State: Customer → New State: Vendor
-   ✅ State updated successfully - isVendor: true
+   ?? Mode Switch Toggled: Vendor Mode
+   ?? Previous State: Customer ? New State: Vendor
+   ? State updated successfully - isVendor: true
    ```
 
 3. **Modify Code with Hot Reload**
@@ -2008,7 +2016,7 @@ MaterialApp
 
 ---
 
-## 💡 Reflection
+## ?? Reflection
 
 ### How Does Hot Reload Improve Productivity?
 
@@ -2033,8 +2041,8 @@ MaterialApp
    - Maintain focus and development flow
 
 **Real-World Impact:**
-- **Without Hot Reload**: 10 UI iterations = 10 × 45 seconds = **7.5 minutes**
-- **With Hot Reload**: 10 UI iterations = 10 × 1 second = **10 seconds**
+- **Without Hot Reload**: 10 UI iterations = 10 � 45 seconds = **7.5 minutes**
+- **With Hot Reload**: 10 UI iterations = 10 � 1 second = **10 seconds**
 - **Time Saved**: ~7 minutes per 10 changes = **~42 minutes per hour of UI development**
 
 ---
@@ -2095,9 +2103,9 @@ MaterialApp
 #### 4. Team Standards
 - **Logging Convention**: Use emojis and prefixes for log categories
   ```dart
-  debugPrint('🔄 [STATE] User toggled mode: $mode');
-  debugPrint('🌐 [NETWORK] Fetching orders for user: $userId');
-  debugPrint('⚠️ [ERROR] Failed to load data: $error');
+  debugPrint('?? [STATE] User toggled mode: $mode');
+  debugPrint('?? [NETWORK] Fetching orders for user: $userId');
+  debugPrint('?? [ERROR] Failed to load data: $error');
   ```
 
 - **Performance Targets**:
@@ -2128,39 +2136,39 @@ MaterialApp
 
 ---
 
-## 🎓 Key Takeaways
+## ?? Key Takeaways
 
 ### Hot Reload
-✅ Speeds up UI development by 10-20×  
-✅ Preserves app state during iterations  
-✅ Encourages experimentation and creativity  
-⚠️ Has limitations (main(), static fields, enums)
+? Speeds up UI development by 10-20�  
+? Preserves app state during iterations  
+? Encourages experimentation and creativity  
+?? Has limitations (main(), static fields, enums)
 
 ### Debug Console
-✅ Essential for tracking app behavior  
-✅ Use `debugPrint()` for production-safe logging  
-✅ Add descriptive, categorized log messages  
-✅ Monitor widget lifecycle and state changes
+? Essential for tracking app behavior  
+? Use `debugPrint()` for production-safe logging  
+? Add descriptive, categorized log messages  
+? Monitor widget lifecycle and state changes
 
 ### Flutter DevTools
-✅ Comprehensive debugging and profiling suite  
-✅ Widget Inspector reveals UI structure  
-✅ Performance View ensures smooth 60 FPS  
-✅ Memory View prevents leaks  
-✅ Essential for professional Flutter development
+? Comprehensive debugging and profiling suite  
+? Widget Inspector reveals UI structure  
+? Performance View ensures smooth 60 FPS  
+? Memory View prevents leaks  
+? Essential for professional Flutter development
 
 ### The Ultimate Workflow
-**Develop → Hot Reload → Debug Console → DevTools → Optimize → Repeat**
+**Develop ? Hot Reload ? Debug Console ? DevTools ? Optimize ? Repeat**
 
 This workflow enables:
-- ⚡ Rapid iteration
-- 🐛 Effective debugging
-- 📊 Performance optimization
-- 🚀 High-quality app delivery
+- ? Rapid iteration
+- ?? Effective debugging
+- ?? Performance optimization
+- ?? High-quality app delivery
 
 ---
 
-## 📚 Additional Resources
+## ?? Additional Resources
 
 - [Flutter Hot Reload Documentation](https://docs.flutter.dev/tools/hot-reload)
 - [Flutter Debugging Guide](https://docs.flutter.dev/testing/debugging)
@@ -2172,7 +2180,7 @@ This workflow enables:
 
 ---
 
-## 🎬 Video Demonstration Guide
+## ?? Video Demonstration Guide
 
 ### Recommended Video Structure (1-2 minutes)
 
@@ -2211,7 +2219,7 @@ This workflow enables:
 
 ---
 
-## 📤 Submission Checklist
+## ?? Submission Checklist
 
 ### Branch and Commit
 - [x] Created branch: `sprint2-hot-reload-devtools`
@@ -2220,7 +2228,7 @@ This workflow enables:
 - [ ] Committed with message: `chore: demonstrated hot reload, debug console, and DevTools usage`
 
 ### Pull Request
-- [ ] Create PR titled: `[Sprint-2] Hot Reload & DevTools Demonstration – [YourTeamName]`
+- [ ] Create PR titled: `[Sprint-2] Hot Reload & DevTools Demonstration � [YourTeamName]`
 - [ ] PR description includes:
   - Summary of demonstration
   - Screenshots (8 screenshots as outlined above)
@@ -2244,7 +2252,7 @@ This workflow enables:
 
 ---
 
-## 🏆 Summary
+## ?? Summary
 
 This assignment demonstrates mastery of Flutter's core development tools:
 
@@ -2260,11 +2268,11 @@ Together, these tools create a **powerful, efficient development workflow** that
 
 ---
 
-## 🔄 Sprint 2 Task 3.21: Managing Local UI State with setState
+## ?? Sprint 2 Task 3.21: Managing Local UI State with setState
 
 This section demonstrates local state management in Flutter using the `setState()` method to create dynamic, interactive user interfaces that respond to user actions in real-time.
 
-### 🎯 Overview
+### ?? Overview
 
 Created a comprehensive **State Management Demo** showcasing:
 - Counter with dynamic UI updates
@@ -2275,13 +2283,13 @@ Created a comprehensive **State Management Demo** showcasing:
 - Order history with list state management
 - Dark/Light theme toggle
 
-### 📂 Implementation
+### ?? Implementation
 
 **File Created**: [lib/screens/state_management_demo.dart](lib/screens/state_management_demo.dart)
 
 ---
 
-### 🔍 Understanding Stateful vs Stateless Widgets
+### ?? Understanding Stateful vs Stateless Widgets
 
 #### **StatelessWidget**
 - **Definition**: Immutable widgets that don't change after being built
@@ -2324,7 +2332,7 @@ class _MyDynamicWidgetState extends State<MyDynamicWidget> {
 
 ---
 
-### ⚙️ How setState() Works
+### ?? How setState() Works
 
 The `setState()` method is Flutter's core mechanism for updating the UI:
 
@@ -2347,12 +2355,12 @@ void _incrementCounter() {
 #### **What Happens Internally:**
 
 ```
-User Action → setState() Called → State Variable Updated → build() Called → UI Refreshed
+User Action ? setState() Called ? State Variable Updated ? build() Called ? UI Refreshed
 ```
 
 ---
 
-### 📝 Implementation Examples
+### ?? Implementation Examples
 
 #### Example 1: Basic Counter
 
@@ -2363,7 +2371,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
   void _incrementCounter() {
     setState(() {
       _counter++;
-      debugPrint('➕ Counter incremented: $_counter');
+      debugPrint('? Counter incremented: $_counter');
     });
   }
 
@@ -2371,7 +2379,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
     setState(() {
       if (_counter > 0) {
         _counter--;
-        debugPrint('➖ Counter decremented: $_counter');
+        debugPrint('? Counter decremented: $_counter');
       }
     });
   }
@@ -2396,10 +2404,10 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
 ```
 
 **Key Points:**
-- ✅ State variable declared in State class
-- ✅ setState() wraps all state changes
-- ✅ Debug prints track state updates
-- ✅ UI updates automatically
+- ? State variable declared in State class
+- ? setState() wraps all state changes
+- ? Debug prints track state updates
+- ? UI updates automatically
 
 ---
 
@@ -2451,7 +2459,7 @@ bool _isDarkMode = false;
 void _toggleTheme() {
   setState(() {
     _isDarkMode = !_isDarkMode;
-    debugPrint('🎨 Theme: ${_isDarkMode ? "Dark" : "Light"}');
+    debugPrint('?? Theme: ${_isDarkMode ? "Dark" : "Light"}');
   });
 }
 
@@ -2490,7 +2498,7 @@ List<String> categories = ['All', 'Pizza', 'Burgers', 'Desserts'];
 void _changeCategory(String category) {
   setState(() {
     _selectedCategory = category;
-    debugPrint('📂 Category: $category');
+    debugPrint('?? Category: $category');
   });
 }
 
@@ -2524,14 +2532,14 @@ double _rating = 3.0;
 void _updateRating(double newRating) {
   setState(() {
     _rating = newRating;
-    debugPrint('⭐ Rating: $newRating');
+    debugPrint('? Rating: $newRating');
   });
 }
 
 Widget build(BuildContext context) {
   return Column(
     children: [
-      Text('⭐ ${_rating.toStringAsFixed(1)} / 5.0'),
+      Text('? ${_rating.toStringAsFixed(1)} / 5.0'),
       Slider(
         value: _rating,
         min: 0,
@@ -2540,9 +2548,9 @@ Widget build(BuildContext context) {
         onChanged: _updateRating,
       ),
       Text(
-        _rating >= 4.5 ? '🌟 Excellent!' : 
-        _rating >= 3.5 ? '👍 Good' : 
-        _rating >= 2.5 ? '😐 Average' : '👎 Needs Improvement',
+        _rating >= 4.5 ? '?? Excellent!' : 
+        _rating >= 3.5 ? '?? Good' : 
+        _rating >= 2.5 ? '?? Average' : '?? Needs Improvement',
       ),
     ],
   );
@@ -2561,7 +2569,7 @@ void _addOrder(String item) {
   setState(() {
     _orderHistory.insert(0, item);  // Add to beginning
     _orderCount++;
-    debugPrint('🛒 Added: $item (Total: $_orderCount)');
+    debugPrint('?? Added: $item (Total: $_orderCount)');
   });
 }
 
@@ -2600,7 +2608,7 @@ Widget build(BuildContext context) {
 
 ---
 
-### 🎨 State Management Features in Demo
+### ?? State Management Features in Demo
 
 The demo includes 7 interactive sections:
 
@@ -2645,17 +2653,17 @@ The demo includes 7 interactive sections:
 
 ---
 
-### ⚠️ Common Mistakes to Avoid
+### ?? Common Mistakes to Avoid
 
-#### ❌ **Mistake 1: Modifying State Without setState()**
+#### ? **Mistake 1: Modifying State Without setState()**
 
 ```dart
-// WRONG ❌
+// WRONG ?
 void _increment() {
   _counter++;  // UI won't update!
 }
 
-// CORRECT ✅
+// CORRECT ?
 void _increment() {
   setState(() {
     _counter++;  // UI updates
@@ -2667,10 +2675,10 @@ void _increment() {
 
 ---
 
-#### ❌ **Mistake 2: Calling setState() Inside build()**
+#### ? **Mistake 2: Calling setState() Inside build()**
 
 ```dart
-// WRONG ❌
+// WRONG ?
 Widget build(BuildContext context) {
   setState(() {  // Infinite loop!
     _counter++;
@@ -2678,7 +2686,7 @@ Widget build(BuildContext context) {
   return Text('$_counter');
 }
 
-// CORRECT ✅
+// CORRECT ?
 Widget build(BuildContext context) {
   return Column(
     children: [
@@ -2696,14 +2704,14 @@ Widget build(BuildContext context) {
 }
 ```
 
-**Why**: Calling `setState()` in `build()` causes an infinite rebuild loop (build → setState → build → ...)
+**Why**: Calling `setState()` in `build()` causes an infinite rebuild loop (build ? setState ? build ? ...)
 
 ---
 
-#### ❌ **Mistake 3: Unnecessary Full Rebuilds**
+#### ? **Mistake 3: Unnecessary Full Rebuilds**
 
 ```dart
-// LESS EFFICIENT ❌
+// LESS EFFICIENT ?
 class BigWidget extends StatefulWidget {
   @override
   _BigWidgetState createState() => _BigWidgetState();
@@ -2724,7 +2732,7 @@ class _BigWidgetState extends State<BigWidget> {
   }
 }
 
-// MORE EFFICIENT ✅
+// MORE EFFICIENT ?
 class BigWidget extends StatefulWidget {
   @override
   _BigWidgetState createState() => _BigWidgetState();
@@ -2750,23 +2758,23 @@ class _BigWidgetState extends State<BigWidget> {
 
 ---
 
-#### ❌ **Mistake 4: Forgetting to Check State Before Updating**
+#### ? **Mistake 4: Forgetting to Check State Before Updating**
 
 ```dart
-// UNSAFE ❌
+// UNSAFE ?
 void _decrement() {
   setState(() {
     _counter--;  // Could go negative!
   });
 }
 
-// SAFE ✅
+// SAFE ?
 void _decrement() {
   setState(() {
     if (_counter > 0) {
       _counter--;
     } else {
-      debugPrint('⚠️ Counter already at 0');
+      debugPrint('?? Counter already at 0');
     }
   });
 }
@@ -2774,7 +2782,7 @@ void _decrement() {
 
 ---
 
-### 📊 State Management Best Practices
+### ?? State Management Best Practices
 
 #### 1. **Use Descriptive Variable Names**
 ```dart
@@ -2833,7 +2841,7 @@ User _user = User(name: 'John', email: 'john@email.com', age: 25);
 
 ---
 
-### 🧪 Testing the Demo
+### ?? Testing the Demo
 
 #### How to Access:
 
@@ -2855,7 +2863,7 @@ User _user = User(name: 'John', email: 'john@email.com', age: 25);
 
 ---
 
-### 📸 Screenshots
+### ?? Screenshots
 
 #### Screenshot 1: Counter Demo
 *Basic counter with increment/decrement and dynamic styling*
@@ -2879,7 +2887,7 @@ User _user = User(name: 'John', email: 'john@email.com', age: 25);
 
 ---
 
-### 💡 Reflection
+### ?? Reflection
 
 #### **What's the difference between Stateless and Stateful widgets?**
 
@@ -2929,14 +2937,14 @@ Think of setState() as a **notification bell** in an office:
 
 1. **Calling setState() Too Frequently**
    ```dart
-   // BAD ❌ - Rebuilds 100 times
+   // BAD ? - Rebuilds 100 times
    for (int i = 0; i < 100; i++) {
      setState(() {
        _counter++;
      });
    }
    
-   // GOOD ✅ - Rebuilds once
+   // GOOD ? - Rebuilds once
    setState(() {
      for (int i = 0; i < 100; i++) {
        _counter++;
@@ -2947,7 +2955,7 @@ Think of setState() as a **notification bell** in an office:
 
 2. **Rebuilding Large Widget Trees**
    ```dart
-   // BAD ❌ - Entire tree rebuilds
+   // BAD ? - Entire tree rebuilds
    class BigPage extends StatefulWidget {
      @override
      Widget build(BuildContext context) {
@@ -2961,7 +2969,7 @@ Think of setState() as a **notification bell** in an office:
      }
    }
    
-   // GOOD ✅ - Extract stateful part
+   // GOOD ? - Extract stateful part
    class BigPage extends StatelessWidget {
      Widget build(BuildContext context) {
        return Column(
@@ -2978,14 +2986,14 @@ Think of setState() as a **notification bell** in an office:
 
 3. **setState() in Loops or Streams**
    ```dart
-   // BAD ❌
+   // BAD ?
    Stream.periodic(Duration(milliseconds: 16)).listen((_) {
      setState(() {
        _counter++;
      });
    });  // 60 rebuilds per second!
    
-   // GOOD ✅
+   // GOOD ?
    Timer.periodic(Duration(seconds: 1), (_) {
      setState(() {
        _counter++;
@@ -2996,7 +3004,7 @@ Think of setState() as a **notification bell** in an office:
 
 4. **Infinite Loops**
    ```dart
-   // NEVER DO THIS ❌
+   // NEVER DO THIS ?
    Widget build(BuildContext context) {
      setState(() {});  // INFINITE LOOP!
      return Container();
@@ -3013,12 +3021,12 @@ Think of setState() as a **notification bell** in an office:
 
 ---
 
-### 🔗 Widget Lifecycle with setState()
+### ?? Widget Lifecycle with setState()
 
 ```
-initState() → build() → User Action → setState() → build() → dispose()
-    ↑                                                    ↓
-    └─────────────────────────────────────────────────┘
+initState() ? build() ? User Action ? setState() ? build() ? dispose()
+    ?                                                    ?
+    +-------------------------------------------------+
                     (Rebuild Loop)
 ```
 
@@ -3060,7 +3068,7 @@ class _MyWidgetState extends State<MyWidget> {
 
 ---
 
-### 📚 Key Takeaways
+### ?? Key Takeaways
 
 | Concept | Key Point |
 |---------|-----------|
@@ -3073,7 +3081,7 @@ class _MyWidgetState extends State<MyWidget> {
 
 ---
 
-### 🚀 How to Access the Demo
+### ?? How to Access the Demo
 
 1. **Run the StreetBuzz app**
 2. **Login or Sign Up**
@@ -3083,24 +3091,181 @@ class _MyWidgetState extends State<MyWidget> {
 
 ---
 
-### 📦 Files Modified/Created
+### ?? Files Modified/Created
 
-- ✅ **Created**: `lib/screens/state_management_demo.dart` (Full setState() demonstrations)
-- ✅ **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
-- ✅ **Updated**: `README.md` (This comprehensive documentation)
+- ? **Created**: `lib/screens/state_management_demo.dart` (Full setState() demonstrations)
+- ? **Modified**: `lib/screens/responsive_home.dart` (Added navigation to demo)
+- ? **Updated**: `README.md` (This comprehensive documentation)
 
 ---
 
-### 🎯 Learning Outcomes
+### ?? Learning Outcomes
 
 After completing this demo, you can:
-- ✅ Distinguish between Stateful and Stateless widgets
-- ✅ Use setState() to manage local UI state
-- ✅ Create interactive, reactive user interfaces
-- ✅ Implement conditional UI based on state
-- ✅ Manage different types of state (int, bool, String, List, double)
-- ✅ Avoid common setState() pitfalls
-- ✅ Optimize widget rebuilds for performance
-- ✅ Debug state changes with logs
+- ? Distinguish between Stateful and Stateless widgets
+- ? Use setState() to manage local UI state
+- ? Create interactive, reactive user interfaces
+- ? Implement conditional UI based on state
+- ? Manage different types of state (int, bool, String, List, double)
+- ? Avoid common setState() pitfalls
+- ? Optimize widget rebuilds for performance
+- ? Debug state changes with logs
+
+---
+
+
+## ?? Sprint 2 Task 3.23: Responsive Design with MediaQuery and LayoutBuilder
+
+This section demonstrates implementing **responsive and adaptive UI design** using Flutter''s `MediaQuery` and `LayoutBuilder` widgets. The app automatically adjusts its layout, padding, and font sizes based on the device''s screen dimensions, ensuring it looks great on all screen sizes � from small phones to large tablets.
+
+---
+
+### ?? What is Responsive Design in Flutter?
+
+Responsive design ensures that your app''s interface adjusts dynamically to different screen sizes and orientations. Instead of using fixed pixel values, you use **relative sizing** based on screen dimensions.
+
+**Why it matters:**
+- ? Improves usability on different devices
+- ? Ensures accessibility and consistent design
+- ? Helps your app adapt seamlessly to both mobile and tablet layouts
+- ? Prevents overflow errors and UI distortion
+- ? Creates a professional, native feel on every device
+
+---
+
+### ?? MediaQuery: Access Device Metrics
+
+`MediaQuery` provides access to device information such as:
+- Screen width and height
+- Device orientation (portrait/landscape)
+- Pixel density
+- Safe area insets
+- Text scale factor
+
+#### Example: Using MediaQuery
+
+```dart
+var screenWidth = MediaQuery.of(context).size.width;
+var screenHeight = MediaQuery.of(context).size.height;
+var orientation = MediaQuery.of(context).orientation;
+
+Container(
+  width: screenWidth * 0.8,  // 80% of screen width
+  height: screenHeight * 0.1, // 10% of screen height
+  color: Colors.teal,
+  child: Center(child: Text(''Responsive Container'')),
+);
+```
+
+**Result**: The container scales proportionally on all devices, maintaining its relative size.
+
+---
+
+### ?? LayoutBuilder: Build Conditional Layouts
+
+`LayoutBuilder` provides layout constraints and helps you build different widget trees for different screen sizes.
+
+#### Example: Using LayoutBuilder
+
+```dart
+LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth < 600) {
+      // Mobile Layout - Vertical
+      return Column(
+        children: [
+          Text(''Mobile Layout''),
+          Icon(Icons.phone_android, size: 80),
+        ],
+      );
+    } else {
+      // Tablet Layout - Horizontal
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(''Tablet Layout''),
+          SizedBox(width: 20),
+          Icon(Icons.tablet, size: 100),
+        ],
+      );
+    }
+  },
+);
+```
+
+**Result**:
+- Screens **under 600px width**: Vertical (Column) layout
+- Screens **over 600px width**: Horizontal (Row) layout � perfect for tablets
+
+---
+
+### ?? Implementation in StreetBuzz
+
+The StreetBuzz app includes a comprehensive **Responsive Design Demo** screen showcasing:
+
+1. **MediaQuery Example**: Displays device metrics and responsive container sizing
+2. **LayoutBuilder Example**: Conditional layouts for mobile vs tablet
+3. **Combined Approach**: Using both tools for maximum flexibility
+4. **Practical Example**: Adaptive product grid that adjusts column count
+
+#### File: `lib/screens/responsive_design_demo.dart`
+
+Complete responsive design demo with 4 interactive sections.
+
+---
+
+### ?? Breakpoints Used
+
+| Device | Width | Layout |
+|--------|-------|--------|
+| **?? Mobile** | < 600px | Single column, vertical layouts |
+| **?? Tablet** | 600px - 900px | 2-3 columns, mixed layouts |
+| **?? Desktop** | > 900px | 4 columns, horizontal layouts |
+
+---
+
+### ?? How to Access the Demo
+
+1. **Run the StreetBuzz app**
+2. **Navigate to** `/responsive-demo` route
+3. **Test on different devices**: Mobile and tablet emulators
+
+---
+
+### ?? Best Practices
+
+1. **Use Relative Sizing**: `width: screenWidth * 0.8` instead of fixed pixels
+2. **Define Clear Breakpoints**: Mobile < 600px, Tablet 600-900px, Desktop > 900px
+3. **Test on Multiple Devices**: Small phone, regular phone, tablet
+4. **Combine Tools Wisely**: MediaQuery for screen decisions, LayoutBuilder for component adaptations
+
+---
+
+### ?? Reflection
+
+**Why is responsiveness important?**
+Responsive apps provide consistent experiences across all devices, improving usability and accessibility.
+
+**LayoutBuilder vs MediaQuery:**
+- **MediaQuery**: Entire screen dimensions, device-level decisions
+- **LayoutBuilder**: Parent widget constraints, component-level adaptations
+
+**Team Scalability:**
+- Create reusable responsive components
+- Define consistent breakpoints
+- Build responsive design systems
+- Automate testing for multiple screen sizes
+
+---
+
+### ?? Resources
+
+- [MediaQuery Documentation](https://api.flutter.dev/flutter/widgets/MediaQuery-class.html)
+- [LayoutBuilder Documentation](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html)
+- [Flutter Responsive Guide](https://docs.flutter.dev/ui/layout/responsive/adaptive-design)
+
+---
+
+**Pro Tip**: Responsive design is about rethinking layouts for different experiences, not just resizing! ??
 
 ---
