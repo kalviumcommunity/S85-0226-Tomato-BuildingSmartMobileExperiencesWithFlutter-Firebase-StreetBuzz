@@ -16,12 +16,31 @@ class ResponsiveHome extends StatefulWidget {
   State<ResponsiveHome> createState() => _ResponsiveHomeState();
 }
 
-class _ResponsiveHomeState extends State<ResponsiveHome> {
+class _ResponsiveHomeState extends State<ResponsiveHome>
+    with SingleTickerProviderStateMixin {
   bool isVendor = false;
   bool isConfirmed = false;
   int selectedIndex = 0;
 
+  late AnimationController _controller;
+
   final _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> _logout() async {
     await _authService.logout();
@@ -39,25 +58,37 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
     bool isTablet = screenWidth > 600;
 
     return Scaffold(
-      backgroundColor: Colors.purple.shade50,
+      backgroundColor: const Color(0xffF5F5F7),
 
       appBar: AppBar(
-        title: const Text("🔥 StreetBuzz Dashboard"),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.white,
+        elevation: 0,
         centerTitle: true,
+        title: const Text(
+          "StreetBuzz",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: [
           IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
         ],
       ),
 
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.purple,
-        child: const Icon(Icons.flash_on),
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Flash Sale Activated ⚡")),
-          );
-        },
+      /// 🔥 Rotating FAB (Explicit Animation)
+      floatingActionButton: RotationTransition(
+        turns: _controller,
+        child: FloatingActionButton(
+          backgroundColor: Colors.deepOrange,
+          child: const Icon(Icons.flash_on),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Flash Sale Activated ⚡")),
+            );
+          },
+        ),
       ),
 
       body: Padding(
@@ -68,45 +99,42 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
             /// ================= HEADER =================
             AnimatedContainer(
-              duration: const Duration(milliseconds: 400),
-              padding: const EdgeInsets.all(22),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: isVendor
-                      ? [Colors.red.shade700, Colors.orange.shade400]
-                      : [Colors.deepOrange, Colors.orange.shade300],
+                      ? [Colors.deepOrange, Colors.redAccent]
+                      : [Colors.orange, Colors.amber],
                 ),
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    isVendor ? "🛒 Vendor Dashboard" : "🎉 Customer Mode",
-                    style: TextStyle(
-                      fontSize: isTablet ? 28 : 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    child: Text(
+                      isVendor
+                          ? "🛒 Vendor Dashboard"
+                          : "🎉 Customer Mode",
+                      key: ValueKey(isVendor),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Switch Mode",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Switch(
-                        value: isVendor,
-                        activeThumbColor: Colors.white,
-                        onChanged: (value) {
-                          setState(() {
-                            isVendor = value;
-                          });
-                        },
-                      ),
-                    ],
+                  Switch(
+                    value: isVendor,
+                    activeColor: Colors.white,
+                    onChanged: (value) {
+                      setState(() {
+                        isVendor = value;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -116,15 +144,15 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
 
             /// ================= ORDER CARD =================
             Container(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
                   BoxShadow(
-                    blurRadius: 6,
+                    blurRadius: 15,
                     color: Colors.black12,
-                    offset: Offset(2, 4),
+                    offset: Offset(0, 8),
                   ),
                 ],
               ),
@@ -137,15 +165,21 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    isConfirmed
-                        ? "Status: Confirmed ✅"
-                        : "Status: Pending",
-                    style: const TextStyle(fontSize: 16),
+
+                  /// 🔥 Fade Animation
+                  AnimatedOpacity(
+                    opacity: isConfirmed ? 1.0 : 0.4,
+                    duration: const Duration(milliseconds: 500),
+                    child: Text(
+                      isConfirmed
+                          ? "Status: Confirmed ✅"
+                          : "Status: Pending",
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
+
                   const SizedBox(height: 12),
 
-                  /// Using CustomButton
                   CustomButton(
                     label: "Confirm Order",
                     onPressed: confirmOrder,
@@ -176,10 +210,14 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         selectedItemColor: Colors.deepOrange,
         onTap: (index) {
           if (index == 1) {
-            Navigator.pushNamed(context, '/orders');
+            Navigator.push(
+              context,
+              _slideRoute(const ScrollableViews()),
+            );
           } else if (index == 2) {
             Navigator.pushNamed(context, '/profile');
           }
+
           setState(() {
             selectedIndex = index;
           });
@@ -193,6 +231,28 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
               icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
+    );
+  }
+
+  /// 🔥 Custom Slide Transition
+  Route _slideRoute(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 600),
+      pageBuilder: (_, animation, __) => page,
+      transitionsBuilder: (_, animation, __, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1, 0),
+            end: Offset.zero,
+          ).animate(
+            CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
   }
 
@@ -215,9 +275,6 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         icon: Icons.star,
       ),
       const LikeButton(),
-      _buildResponsiveLayoutCard(),
-      _buildScrollableViewsCard(),
-      _buildStateManagementCard(),
     ];
   }
 
@@ -240,34 +297,6 @@ class _ResponsiveHomeState extends State<ResponsiveHome> {
         icon: Icons.notifications,
       ),
       const LikeButton(),
-      _buildScrollableViewsCard(),
-      _buildStateManagementCard(),
     ];
-  }
-
-  /// ================= EXTRA NAV CARDS =================
-
-  Widget _buildResponsiveLayoutCard() {
-    return AppCard(
-      title: "Responsive Layout",
-      subtitle: "View layout demo ➡️",
-      icon: Icons.dashboard_customize,
-    );
-  }
-
-  Widget _buildScrollableViewsCard() {
-    return AppCard(
-      title: "Scrollable Views",
-      subtitle: "ListView & GridView demo ➡️",
-      icon: Icons.view_list,
-    );
-  }
-
-  Widget _buildStateManagementCard() {
-    return AppCard(
-      title: "State Management",
-      subtitle: "setState() demo ➡️",
-      icon: Icons.sync,
-    );
   }
 }
