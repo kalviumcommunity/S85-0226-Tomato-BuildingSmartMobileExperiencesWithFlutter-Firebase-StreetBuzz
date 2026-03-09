@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+// Screens
 import 'screens/user_input_form.dart';
 import 'screens/login_screen.dart';
 import 'screens/responsive_home.dart';
@@ -9,11 +12,18 @@ import 'screens/orders_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/responsive_design_demo.dart';
+
+// Services
 import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -25,11 +35,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'StreetBuzz',
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepOrange,
+        ),
         useMaterial3: true,
       ),
 
+      // First screen
       initialRoute: '/welcome',
 
       routes: {
@@ -56,16 +70,22 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder(
       stream: authService.authStateChanges,
       builder: (context, snapshot) {
+
+        // Loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
 
+        // If user logged in → go to Home
         if (snapshot.hasData) {
           return const ResponsiveHome();
         }
 
+        // If user not logged in → show Login
         return const LoginScreen();
       },
     );
