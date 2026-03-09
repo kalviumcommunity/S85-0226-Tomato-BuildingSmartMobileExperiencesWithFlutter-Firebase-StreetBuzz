@@ -129,7 +129,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
                   ),
                   Switch(
                     value: isVendor,
-                    activeColor: Colors.white,
+                    activeThumbColor: Colors.white,
                     onChanged: (value) {
                       setState(() {
                         isVendor = value;
@@ -238,8 +238,8 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
   Route _slideRoute(Widget page) {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 600),
-      pageBuilder: (_, animation, __) => page,
-      transitionsBuilder: (_, animation, __, child) {
+      pageBuilder: (_, animation, _) => page,
+      transitionsBuilder: (_, animation, _, child) {
         return SlideTransition(
           position: Tween<Offset>(
             begin: const Offset(1, 0),
