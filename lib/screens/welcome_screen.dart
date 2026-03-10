@@ -68,11 +68,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.dispose();
   }
 
-  void _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
+  void _navigateToAuth() {
+    Navigator.pushReplacementNamed(context, '/auth');
   }
 
   @override
@@ -189,7 +186,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: _navigateToHome,
+                        onPressed: _navigateToAuth,
                         child: const Text(
                           "Get Started",
                           style: TextStyle(

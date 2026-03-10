@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../services/firestore_service.dart';
 import 'signup_screen.dart';
-import 'responsive_home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
+  final _firestoreService = FirestoreService();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -33,18 +34,32 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
+      debugPrint('Attempting login with email: ${_emailController.text.trim()}');
+      
       final user = await _authService.login(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
 
       if (user != null && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ResponsiveHome()),
+        debugPrint('Login successful for user: ${user.uid}');
+        
+        // Update user last login
+        await _firestoreService.updateUserData(user.uid, {
+          'lastLogin': DateTime.now().toIso8601String(),
+          'email': user.email,
+        });
+
+        // AuthWrapper will handle navigation automatically
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login successful!'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
     } catch (e) {
+      debugPrint('Login error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
