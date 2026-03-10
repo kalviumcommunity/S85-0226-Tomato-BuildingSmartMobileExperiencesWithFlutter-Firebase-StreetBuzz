@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import '../services/firestore_service.dart';
 
 class UserInputForm extends StatefulWidget {
   const UserInputForm({super.key});
@@ -9,6 +11,8 @@ class UserInputForm extends StatefulWidget {
 
 class _UserInputFormState extends State<UserInputForm> {
   final _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
+  final _firestoreService = FirestoreService();
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -21,20 +25,53 @@ class _UserInputFormState extends State<UserInputForm> {
 
     setState(() => isLoading = true);
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      debugPrint('Submitting form for: ${nameController.text.trim()}');
 
-    setState(() => isLoading = false);
+      // Get current user
+      final currentUser = _authService.currentUser;
+      if (currentUser == null) {
+        throw Exception('No user logged in. Please login first.');
+      }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("✅ Form Submitted Successfully"),
-        backgroundColor: Colors.green,
-      ),
-    );
+      // Save user data to Firestore
+      await _firestoreService.addUserData(currentUser.uid, {
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'updatedAt': DateTime.now().toIso8601String(),
+        'profileCompleted': true,
+      });
 
-    nameController.clear();
-    emailController.clear();
-    passwordController.clear();
+      debugPrint('User data saved to Firestore');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("✅ Profile updated successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Clear form after successful submission
+        nameController.clear();
+        emailController.clear();
+        passwordController.clear();
+      }
+    } catch (e) {
+      debugPrint('Form submission error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
   }
 
   @override

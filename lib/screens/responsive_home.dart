@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'responsive_layout.dart';
-import 'scrollable_views.dart';
-import 'state_management_demo.dart';
-
+import '../services/firestore_service.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/app_card.dart';
 import '../widgets/section_title.dart';
@@ -25,6 +22,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
   late AnimationController _controller;
 
   final _authService = AuthService();
+  final _firestoreService = FirestoreService();
 
   @override
   void initState() {
@@ -43,13 +41,65 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
   }
 
   Future<void> _logout() async {
-    await _authService.logout();
+    try {
+      await _authService.logout();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/welcome');
+      }
+    } catch (e) {
+      debugPrint('Logout error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error logging out: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
-  void confirmOrder() {
-    setState(() {
-      isConfirmed = true;
-    });
+  Future<void> confirmOrder() async {
+    try {
+      final currentUser = _authService.currentUser;
+      if (currentUser == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please login to confirm orders'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+
+      // Create a sample order in Firestore
+      await _firestoreService.createOrder({
+        'userId': currentUser.uid,
+        'itemName': 'Paneer Roll',
+        'totalAmount': 120,
+        'status': 'confirmed',
+        'customerEmail': currentUser.email,
+      });
+
+      setState(() {
+        isConfirmed = true;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Order confirmed successfully! 🎉'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      debugPrint('Order confirmation error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error confirming order: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -210,10 +260,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
         selectedItemColor: Colors.deepOrange,
         onTap: (index) {
           if (index == 1) {
-            Navigator.push(
-              context,
-              _slideRoute(const ScrollableViews()),
-            );
+            Navigator.pushNamed(context, '/orders');
           } else if (index == 2) {
             Navigator.pushNamed(context, '/profile');
           }
@@ -263,16 +310,27 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
         title: "Order Food",
         subtitle: "Browse stalls & order instantly",
         icon: Icons.fastfood,
+        onTap: () => Navigator.pushNamed(context, '/orders'),
       ),
       AppCard(
         title: "Live Queue",
         subtitle: "Track your order in real-time",
         icon: Icons.timer,
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Live queue feature coming soon!')),
+          );
+        },
       ),
       AppCard(
         title: "Top Vendors",
         subtitle: "Find best-rated street food",
         icon: Icons.star,
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Top vendors feature coming soon!')),
+          );
+        },
       ),
       const LikeButton(),
     ];
@@ -285,16 +343,27 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
         title: "Manage Orders",
         subtitle: "Accept & prepare orders fast",
         icon: Icons.store,
+        onTap: () => Navigator.pushNamed(context, '/orders'),
       ),
       AppCard(
         title: "Dashboard",
         subtitle: "Monitor rush-hour sales",
         icon: Icons.dashboard,
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Vendor dashboard coming soon!')),
+          );
+        },
       ),
       AppCard(
         title: "Alerts",
         subtitle: "Instant order notifications",
         icon: Icons.notifications,
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Alerts feature coming soon!')),
+          );
+        },
       ),
       const LikeButton(),
     ];
