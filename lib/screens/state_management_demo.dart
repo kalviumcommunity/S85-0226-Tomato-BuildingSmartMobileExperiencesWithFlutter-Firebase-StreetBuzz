@@ -7,10 +7,7 @@ class StateManagementDemo extends StatefulWidget {
   const StateManagementDemo({super.key});
 
   @override
-  State<StateManagementDemo> createState() {
-    debugPrint('🏗️ StateManagementDemo: Creating state instance');
-    return _StateManagementDemoState();
-  }
+  State<StateManagementDemo> createState() => _StateManagementDemoState();
 }
 
 class _StateManagementDemoState extends State<StateManagementDemo> {
@@ -27,6 +24,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
   @override
   void initState() {
     super.initState();
+    debugPrint('🏗️ StateManagementDemo: Creating state instance');
     debugPrint('🚀 StateManagementDemo: Widget initialized');
     debugPrint('📊 Initial State - Counter: $_counter, Likes: $_likeCount');
   }
@@ -251,7 +249,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
               duration: const Duration(milliseconds: 300),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: counterColor.withOpacity(0.2),
+                color: counterColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: counterColor, width: 2),
               ),
@@ -271,7 +269,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                   : _counter >= 5
                   ? '💪 Keep going!'
                   : '👆 Tap to start',
-              style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.7)),
+              style: TextStyle(fontSize: 16, color: textColor.withValues(alpha: 0.7)),
             ),
             const SizedBox(height: 20),
             Row(
@@ -409,7 +407,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
               _isVipMember
                   ? '✨ Enjoy exclusive benefits!'
                   : 'Upgrade to VIP for special perks',
-              style: TextStyle(fontSize: 14, color: textColor.withOpacity(0.7)),
+              style: TextStyle(fontSize: 14, color: textColor.withValues(alpha: 0.7)),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -502,7 +500,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                   '/ 5.0',
                   style: TextStyle(
                     fontSize: 18,
-                    color: textColor.withOpacity(0.5),
+                    color: textColor.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -525,7 +523,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                   : _rating >= 2.5
                   ? '😐 Average'
                   : '👎 Needs Improvement',
-              style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.7)),
+              style: TextStyle(fontSize: 16, color: textColor.withValues(alpha: 0.7)),
             ),
           ],
         ),
@@ -567,7 +565,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                 child: Text(
                   'No orders yet! Add some items below.',
                   style: TextStyle(
-                    color: textColor.withOpacity(0.5),
+                    color: textColor.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                   textAlign: TextAlign.center,
@@ -593,7 +591,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                     ),
                     subtitle: Text(
                       'Order #${_orderHistory.length - index}',
-                      style: TextStyle(color: textColor.withOpacity(0.5)),
+                      style: TextStyle(color: textColor.withValues(alpha: 0.5)),
                     ),
                     trailing: const Icon(
                       Icons.check_circle,
@@ -607,7 +605,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
                 'Showing latest 5 of ${_orderHistory.length} orders',
                 style: TextStyle(
                   fontSize: 12,
-                  color: textColor.withOpacity(0.5),
+                  color: textColor.withValues(alpha: 0.5),
                 ),
               ),
             const SizedBox(height: 16),
@@ -696,7 +694,7 @@ class _StateManagementDemoState extends State<StateManagementDemo> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.7)),
+            style: TextStyle(fontSize: 16, color: textColor.withValues(alpha: 0.7)),
           ),
           Text(
             value,

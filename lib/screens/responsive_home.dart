@@ -44,7 +44,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
     try {
       await _authService.logout();
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/welcome');
+        Navigator.pushReplacementNamed(context, '/splash');
       }
     } catch (e) {
       debugPrint('Logout error: $e');
@@ -85,6 +85,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
         isConfirmed = true;
       });
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Order confirmed successfully! 🎉'),
@@ -93,6 +94,7 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
       );
     } catch (e) {
       debugPrint('Order confirmation error: $e');
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error confirming order: $e'),
@@ -278,28 +280,6 @@ class _ResponsiveHomeState extends State<ResponsiveHome>
               icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
-    );
-  }
-
-  /// 🔥 Custom Slide Transition
-  Route _slideRoute(Widget page) {
-    return PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 600),
-      pageBuilder: (_, animation, _) => page,
-      transitionsBuilder: (_, animation, _, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeInOut,
-            ),
-          ),
-          child: child,
-        );
-      },
     );
   }
 

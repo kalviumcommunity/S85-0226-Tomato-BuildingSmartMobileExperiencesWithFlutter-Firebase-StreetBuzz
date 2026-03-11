@@ -64,7 +64,7 @@ class ScrollableViews extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.orange.withOpacity(0.3),
+            color: Colors.orange.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -153,12 +153,12 @@ class ScrollableViews extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: (item['color'] as Color).withOpacity(0.3),
+                  color: (item['color'] as Color).withValues(alpha: 0.3),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (item['color'] as Color).withOpacity(0.2),
+                    color: (item['color'] as Color).withValues(alpha: 0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -169,7 +169,7 @@ class ScrollableViews extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 35,
-                    backgroundColor: (item['color'] as Color).withOpacity(0.2),
+                    backgroundColor: (item['color'] as Color).withValues(alpha: 0.2),
                     child: Text(
                       item['name'].toString().split(' ')[0],
                       style: const TextStyle(fontSize: 32),
@@ -251,7 +251,7 @@ class ScrollableViews extends StatelessWidget {
               contentPadding: const EdgeInsets.all(16),
               leading: CircleAvatar(
                 radius: 30,
-                backgroundColor: (vendor['color'] as Color).withOpacity(0.2),
+                backgroundColor: (vendor['color'] as Color).withValues(alpha: 0.2),
                 child: Icon(
                   Icons.store,
                   color: vendor['color'] as Color,
@@ -370,7 +370,7 @@ class ScrollableViews extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: color.withOpacity(0.3),
+                    color: color.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -400,7 +400,7 @@ class ScrollableViews extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
