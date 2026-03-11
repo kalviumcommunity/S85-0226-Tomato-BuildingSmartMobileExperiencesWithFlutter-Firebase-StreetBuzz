@@ -10,7 +10,6 @@ class ResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     // 📱 Get screen dimensions using MediaQuery
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     bool isTablet = screenWidth > 600;
     bool isLargeScreen = screenWidth > 900;
 
@@ -84,7 +83,7 @@ class ResponsiveLayout extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.orange.withOpacity(0.3),
+            color: Colors.orange.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -187,7 +186,7 @@ class ResponsiveLayout extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -279,10 +278,10 @@ class ResponsiveLayout extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -409,13 +408,13 @@ class ResponsiveLayout extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: accentColor.withOpacity(0.3)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundColor: accentColor.withOpacity(0.2),
+            backgroundColor: accentColor.withValues(alpha: 0.2),
             child: Icon(Icons.store, color: accentColor, size: 30),
           ),
           const SizedBox(width: 12),
