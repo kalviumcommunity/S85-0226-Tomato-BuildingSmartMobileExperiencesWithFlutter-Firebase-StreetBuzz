@@ -41,48 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCwMjo6s9x2WO-fsZKPz1j-lS44VALKGPM',
-    appId: '1:207912333514:web:f73651dac763b856e90433',
-    messagingSenderId: '207912333514',
-    projectId: 'streetbuzz-07',
-    authDomain: 'streetbuzz-07.firebaseapp.com',
-    storageBucket: 'streetbuzz-07.firebasestorage.app',
-    measurementId: 'G-EQZ5QD1S0Q',
+    apiKey: 'AIzaSyA-JDVWv7GoBk3ogmMQysBatU1wVfPZScw',
+    appId: '1:691348964439:web:dff671331b6c6ee8b08f12',
+    messagingSenderId: '691348964439',
+    projectId: 'tomato-8904c',
+    authDomain: 'tomato-8904c.firebaseapp.com',
+    storageBucket: 'tomato-8904c.firebasestorage.app',
+    measurementId: 'G-RME5DE4N1K',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC_n1I2i6Nj76Hs8twQXLp8QTvbkCRgM3Q',
-    appId: '1:207912333514:android:48f1f1bee45718a4e90433',
-    messagingSenderId: '207912333514',
-    projectId: 'streetbuzz-07',
-    storageBucket: 'streetbuzz-07.firebasestorage.app',
+    apiKey: 'AIzaSyDlwJ2dKGXwFbLnNVwo-XKv9maMVTtz0IE',
+    appId: '1:691348964439:android:5cf3308d0555ffa3b08f12',
+    messagingSenderId: '691348964439',
+    projectId: 'tomato-8904c',
+    storageBucket: 'tomato-8904c.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAj3YY3pnYQvW1vhZ-5TK1veGW1GIh95c0',
-    appId: '1:207912333514:ios:dbfe468453dcea20e90433',
-    messagingSenderId: '207912333514',
-    projectId: 'streetbuzz-07',
-    storageBucket: 'streetbuzz-07.firebasestorage.app',
+    apiKey: 'AIzaSyB6w11VIGu4fgYliRuIq8N-T_I89eTBGe8',
+    appId: '1:691348964439:ios:88441e5dcd080b66b08f12',
+    messagingSenderId: '691348964439',
+    projectId: 'tomato-8904c',
+    storageBucket: 'tomato-8904c.firebasestorage.app',
     iosBundleId: 'com.example.streetbuzz',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAj3YY3pnYQvW1vhZ-5TK1veGW1GIh95c0',
-    appId: '1:207912333514:ios:dbfe468453dcea20e90433',
-    messagingSenderId: '207912333514',
-    projectId: 'streetbuzz-07',
-    storageBucket: 'streetbuzz-07.firebasestorage.app',
+    apiKey: 'AIzaSyB6w11VIGu4fgYliRuIq8N-T_I89eTBGe8',
+    appId: '1:691348964439:ios:88441e5dcd080b66b08f12',
+    messagingSenderId: '691348964439',
+    projectId: 'tomato-8904c',
+    storageBucket: 'tomato-8904c.firebasestorage.app',
     iosBundleId: 'com.example.streetbuzz',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCwMjo6s9x2WO-fsZKPz1j-lS44VALKGPM',
-    appId: '1:207912333514:web:14d8e6420298be3de90433',
-    messagingSenderId: '207912333514',
-    projectId: 'streetbuzz-07',
-    authDomain: 'streetbuzz-07.firebaseapp.com',
-    storageBucket: 'streetbuzz-07.firebasestorage.app',
-    measurementId: 'G-1RMMEGQZ5N',
+    apiKey: 'AIzaSyA-JDVWv7GoBk3ogmMQysBatU1wVfPZScw',
+    appId: '1:691348964439:web:15325c8f504c291ab08f12',
+    messagingSenderId: '691348964439',
+    projectId: 'tomato-8904c',
+    authDomain: 'tomato-8904c.firebaseapp.com',
+    storageBucket: 'tomato-8904c.firebasestorage.app',
+    measurementId: 'G-Y273F5D8QN',
   );
 }
