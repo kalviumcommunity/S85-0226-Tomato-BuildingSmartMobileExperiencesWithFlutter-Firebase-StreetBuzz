@@ -1,400 +1,393 @@
 import 'package:flutter/material.dart';
+import '../models/order_model.dart';
 import '../services/auth_service.dart';
 import '../services/firestore_service.dart';
 import '../widgets/app_button.dart';
-import '../widgets/section_card.dart';
-import '../widgets/loading_overlay.dart';
-import '../widgets/custom_sliver_delegate.dart';
+import '../widgets/app_card.dart';
+import '../widgets/loading_widget.dart';
 
-class HomeScreenSimple extends StatefulWidget {
-  const HomeScreenSimple({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreenSimple> createState() => _HomeScreenSimpleState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenSimpleState extends State<HomeScreenSimple> with TickerProviderStateMixin {
-  final _authService = AuthService();
-  final _firestoreService = FirestoreService();
-  
-  late AnimationController _fabController;
-  late Animation<double> _fabAnimation;
-  
-  bool _isVendor = false;
-  bool _isOrderConfirmed = false;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fabController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _fabAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_fabController);
-    _fabController.repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _fabController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _confirmOrder() async {
-    setState(() => _isLoading = true);
-    
-    try {
-      final currentUser = _authService.currentUser;
-      if (currentUser == null) {
-        _showErrorSnackBar('Please login to confirm orders');
-        return;
-      }
-
-      await _firestoreService.createOrder({
-        'userId': currentUser.uid,
-        'itemName': 'Paneer Roll',
-        'totalAmount': 120,
-        'status': 'confirmed',
-        'customerEmail': currentUser.email,
-      });
-
-      setState(() => _isOrderConfirmed = true);
-      _showSuccessSnackBar('Order confirmed successfully! 🎉');
-    } catch (e) {
-      _showErrorSnackBar('Error confirming order: $e');
-    } finally {
-      setState(() => _isLoading = false);
-    }
-  }
-
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        margin: const EdgeInsets.all(16),
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        margin: const EdgeInsets.all(16),
-      ),
-    );
-  }
+class _HomeScreenState extends State<HomeScreen> {
+  final AuthService _authService = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 600;
+
     return Scaffold(
-      body: LoadingOverlay(
-        isLoading: _isLoading,
-        child: CustomScrollView(
-          slivers: [
-            // Header
-            SliverAppBar(
-              expandedHeight: 200,
-              floating: false,
-              pinned: true,
-              backgroundColor: const Color(0xFFFF6B35),
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFFFF6B35),
-                        Color(0xFFFF8A65),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          _buildOrdersView(isTablet),
+          _buildMenuView(isTablet),
+          _buildProfileView(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) => setState(() => _selectedIndex = index),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+      floatingActionButton: _selectedIndex == 1
+          ? FloatingActionButton.extended(
+              onPressed: _createNewOrder,
+              icon: const Icon(Icons.add),
+              label: const Text('New Order'),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildOrdersView(bool isTablet) {
+    final user = _authService.currentUser;
+    if (user == null) return const SizedBox.shrink();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Orders'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => setState(() {}),
+          ),
+        ],
+      ),
+      body: StreamBuilder<List<OrderModel>>(
+        stream: _firestoreService.getUserOrders(user.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingWidget(message: 'Loading orders...');
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          final orders = snapshot.data ?? [];
+
+          if (orders.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.receipt_long,
+                    size: 64,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No orders yet',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Start by creating your first order',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  AppButton(
+                    text: 'Create Order',
+                    onPressed: () => setState(() => _selectedIndex = 1),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (isTablet) {
+            return GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.5,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(
+                  orderId: order.id,
+                  customerName: order.customerName,
+                  totalAmount: order.totalAmount,
+                  status: order.status.toString().split('.').last,
+                  createdAt: order.createdAt,
+                  onTap: () => _showOrderDetails(order),
+                );
+              },
+            );
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: OrderCard(
+                    orderId: order.id,
+                    customerName: order.customerName,
+                    totalAmount: order.totalAmount,
+                    status: order.status.toString().split('.').last,
+                    createdAt: order.createdAt,
+                    onTap: () => _showOrderDetails(order),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildMenuView(bool isTablet) {
+    final menuItems = [
+      {'name': 'Burger', 'price': 8.99, 'icon': Icons.lunch_dining},
+      {'name': 'Pizza', 'price': 12.99, 'icon': Icons.local_pizza},
+      {'name': 'Tacos', 'price': 9.99, 'icon': Icons.tapas},
+      {'name': 'Hot Dog', 'price': 6.99, 'icon': Icons.kebab_dining},
+      {'name': 'Sandwich', 'price': 7.99, 'icon': Icons.breakfast_dining},
+      {'name': 'Salad', 'price': 8.49, 'icon': Icons.emoji_food_beverage},
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Menu'),
+      ),
+      body: isTablet
+          ? GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.8,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: menuItems.length,
+              itemBuilder: (context, index) {
+                final item = menuItems[index];
+                return AppCard(
+                  onTap: () => _addToCart(item),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        item['icon'] as IconData,
+                        size: 48,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        item['name'] as String,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '\$${(item['price'] as double).toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: menuItems.length,
+              itemBuilder: (context, index) {
+                final item = menuItems[index];
+                return AppCard(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  onTap: () => _addToCart(item),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          item['icon'] as IconData,
+                          size: 32,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['name'] as String,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '\$${(item['price'] as double).toStringAsFixed(2)}',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.add_circle,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+    );
+  }
+
+  Widget _buildProfileView() {
+    final user = _authService.currentUser;
+    if (user == null) return const SizedBox.shrink();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Profile Header
+            AppCard(
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: Text(
+                      user.displayName?.isNotEmpty == true
+                          ? user.displayName![0].toUpperCase()
+                          : 'U',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.displayName ?? 'User',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          user.email ?? '',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'StreetBuzz',
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _isVendor ? 'Vendor Dashboard' : 'Customer Mode',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                ],
               ),
             ),
             
-            // Content
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverList(
-                delegate: CustomSliverChildDelegate(
-                  childCount: 4,
-                  itemBuilder: (context, index) {
-                    switch (index) {
-                      case 0:
-                        return _buildOrderCard();
-                      case 1:
-                        return _buildQuickActionsCard();
-                      case 2:
-                        return _buildStatsCard();
-                      case 3:
-                        return _buildRecentActivityCard();
-                      default:
-                        return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      
-      // Floating Action Button
-      floatingActionButton: Stack(
-        children: [
-          ScaleTransition(
-            scale: _fabAnimation,
-            child: FloatingActionButton(
-              onPressed: () {
-                _showSuccessSnackBar('Flash Sale Activated ⚡');
-              },
-              backgroundColor: const Color(0xFFFF6B35),
-              child: const Icon(Icons.flash_on, color: Colors.white),
-            ),
-          ),
-          // Vendor Mode Toggle
-          Positioned(
-            right: 0,
-            bottom: 80,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+            const SizedBox(height: 16),
+            
+            // Quick Actions
+            AppCard(
+              child: Column(
                 children: [
-                  const Icon(Icons.store, size: 16, color: Color(0xFFFF6B35)),
-                  const SizedBox(width: 8),
-                  Switch(
-                    value: _isVendor,
-                    onChanged: (value) => setState(() => _isVendor = value),
-                    activeThumbColor: const Color(0xFFFF6B35),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: const Text('Order History'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => setState(() => _selectedIndex = 0),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.location_on),
+                    title: const Text('Delivery Addresses'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {},
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.payment),
+                    title: const Text('Payment Methods'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {},
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: const Text('Settings'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {},
                   ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOrderCard() {
-    return SectionCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.receipt_long,
-                  color: Color(0xFFFF6B35),
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Current Order',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF1A1A1A),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _isOrderConfirmed ? 'Confirmed ✅' : 'Pending',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _isOrderConfirmed ? Colors.green : Colors.orange,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Paneer Roll • ₹120',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF666666),
-            ),
-          ),
-          const SizedBox(height: 16),
-          AppButton(
-            text: _isOrderConfirmed ? 'View Order' : 'Confirm Order',
-            onPressed: _isOrderConfirmed ? null : _confirmOrder,
-            isFullWidth: true,
-            backgroundColor: _isOrderConfirmed ? Colors.grey : const Color(0xFFFF6B35),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActionsCard() {
-    return SectionCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionButton(
-                  'Place Order',
-                  Icons.add_shopping_cart,
-                  const Color(0xFF4CAF50),
-                  () => _showSuccessSnackBar('Opening order menu...'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildActionButton(
-                  'Track Order',
-                  Icons.location_on,
-                  const Color(0xFF2196F3),
-                  () => _showSuccessSnackBar('Opening tracker...'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildActionButton(
-                  'View Menu',
-                  Icons.restaurant_menu,
-                  const Color(0xFFFF9800),
-                  () => _showSuccessSnackBar('Loading menu...'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildActionButton(
-                  'Support',
-                  Icons.support_agent,
-                  const Color(0xFF9C27B0),
-                  () => _showSuccessSnackBar('Opening support...'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton(String title, IconData icon, Color color, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: color,
-              ),
-              textAlign: TextAlign.center,
+            
+            const SizedBox(height: 16),
+            
+            // Logout Button
+            AppButton(
+              text: 'Sign Out',
+              onPressed: _logout,
+              backgroundColor: Theme.of(context).colorScheme.error,
+              textColor: Theme.of(context).colorScheme.onError,
             ),
           ],
         ),
@@ -402,150 +395,73 @@ class _HomeScreenSimpleState extends State<HomeScreenSimple> with TickerProvider
     );
   }
 
-  Widget _buildStatsCard() {
-    return SectionCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Today\'s Stats',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatItem('Orders', '24', const Color(0xFF4CAF50)),
-              ),
-              Expanded(
-                child: _buildStatItem('Revenue', '₹3,240', const Color(0xFF2196F3)),
-              ),
-              Expanded(
-                child: _buildStatItem('Rating', '4.8', const Color(0xFFFF9800)),
-              ),
-            ],
+  void _createNewOrder() {
+    // Show order creation dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create New Order'),
+        content: const Text('Order creation feature coming soon!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: color.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+  void _addToCart(Map<String, dynamic> item) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${item['name']} added to cart!'),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
-  Widget _buildRecentActivityCard() {
-    return SectionCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Recent Activity',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildActivityItem(
-            'New order received',
-            'Order #101 - Burger Combo',
-            '2 minutes ago',
-            Icons.new_releases,
-          ),
-          const SizedBox(height: 12),
-          _buildActivityItem(
-            'Payment confirmed',
-            'Order #100 - Pizza',
-            '15 minutes ago',
-            Icons.payment,
-          ),
-          const SizedBox(height: 12),
-          _buildActivityItem(
-            'Order delivered',
-            'Order #099 - Pasta',
-            '1 hour ago',
-            Icons.delivery_dining,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActivityItem(String title, String subtitle, String time, IconData icon) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: const Color(0xFFFF6B35), size: 20),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
+  void _showOrderDetails(OrderModel order) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Order #${order.id}'),
+        content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1A1A),
-                ),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF666666),
-                ),
-              ),
+              Text('Status: ${order.status.toString().split('.').last}'),
+              Text('Total: \$${order.totalAmount.toStringAsFixed(2)}'),
+              const SizedBox(height: 16),
+              const Text('Items:', style: TextStyle(fontWeight: FontWeight.bold)),
+              ...order.items.map((item) => Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text('${item.name} x${item.quantity} - \$${item.subtotal.toStringAsFixed(2)}'),
+              )),
             ],
           ),
         ),
-        Text(
-          time,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF999999),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  Future<void> _logout() async {
+    try {
+      await _authService.signOut();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error signing out: ${e.toString()}'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 }

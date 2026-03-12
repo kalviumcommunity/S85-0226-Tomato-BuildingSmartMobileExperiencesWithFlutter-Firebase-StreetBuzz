@@ -1,213 +1,136 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatefulWidget {
-  final String? label;
-  final String? hint;
+  final String labelText;
+  final String? hintText;
   final String? errorText;
+  final String? initialValue;
   final bool obscureText;
-  final TextInputType? keyboardType;
-  final TextEditingController? controller;
-  final VoidCallback? onTap;
+  final bool enabled;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
   final ValueChanged<String>? onChanged;
-  final VoidCallback? onToggleVisibility;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
+  final FormFieldValidator<String>? validator;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-  final bool autofocus;
   final int? maxLines;
+  final int? maxLength;
+  final bool showPasswordToggle;
 
   const AppTextField({
     super.key,
-    this.label,
-    this.hint,
+    required this.labelText,
+    this.hintText,
     this.errorText,
+    this.initialValue,
     this.obscureText = false,
-    this.keyboardType,
-    this.controller,
-    this.onTap,
+    this.enabled = true,
+    this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
     this.onChanged,
-    this.onToggleVisibility,
+    this.onSubmitted,
+    this.onTap,
+    this.validator,
+    this.controller,
+    this.focusNode,
     this.prefixIcon,
     this.suffixIcon,
-    this.autofocus = false,
     this.maxLines = 1,
+    this.maxLength,
+    this.showPasswordToggle = false,
   });
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
 
-class _AppTextFieldState extends State<AppTextField> with SingleTickerProviderStateMixin {
-  late AnimationController _focusController;
-  late Animation<double> _focusAnimation;
-  late Animation<Color?> _labelColorAnimation;
-  bool _isFocused = false;
+class _AppTextFieldState extends State<AppTextField> {
+  late bool _obscureText;
 
   @override
   void initState() {
     super.initState();
-    _focusController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _focusAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _focusController,
-      curve: Curves.easeInOut,
-    ));
+    _obscureText = widget.obscureText;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _labelColorAnimation = ColorTween(
-      begin: Colors.grey[600]!,
-      end: Theme.of(context).colorScheme.primary,
-    ).animate(CurvedAnimation(
-      parent: _focusController,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _focusController.dispose();
-    super.dispose();
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AnimatedBuilder(
-          animation: _focusAnimation,
-          builder: (context, child) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: _isFocused 
-                        ? theme.colorScheme.primary.withAlpha(51)
-                        : Color.fromRGBO(0, 0, 0, 0.05),
-                    blurRadius: _isFocused ? 8 : 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: TextFormField(
-                controller: widget.controller,
-                obscureText: widget.obscureText,
-                keyboardType: widget.keyboardType,
-                autofocus: widget.autofocus,
-                maxLines: widget.maxLines,
-                onChanged: widget.onChanged,
-                decoration: InputDecoration(
-                  labelText: widget.label,
-                  hintText: widget.hint,
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelStyle: TextStyle(
-                    color: _labelColorAnimation.value ?? Colors.grey[600]!,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  prefixIcon: widget.prefixIcon != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: widget.prefixIcon,
-                        )
-                      : null,
-                  suffixIcon: widget.suffixIcon != null ||
-                          widget.onToggleVisibility != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: widget.suffixIcon ??
-                              (widget.obscureText
-                                  ? IconButton(
-                                      icon: Icon(
-                                        Icons.visibility_off,
-                                        color: Colors.grey[600],
-                                        size: 20,
-                                      ),
-                                      onPressed: widget.onToggleVisibility,
-                                    )
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.visibility,
-                                        color: Colors.grey[600],
-                                        size: 20,
-                                      ),
-                                      onPressed: widget.onToggleVisibility,
-                                    )),
-                        )
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.primary,
-                      width: 2,
-                    ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.error,
-                      width: 2,
-                    ),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.error,
-                      width: 2,
-                    ),
-                  ),
-                  errorText: null,
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                ),
-                onTap: () {
-                  setState(() => _isFocused = true);
-                  _focusController.forward();
-                },
-                onFieldSubmitted: (_) {
-                  setState(() => _isFocused = false);
-                  _focusController.reverse();
-                },
-              ),
-            );
-          },
+    Widget? effectiveSuffixIcon = widget.suffixIcon;
+    
+    if (widget.showPasswordToggle && widget.obscureText) {
+      effectiveSuffixIcon = IconButton(
+        icon: Icon(
+          _obscureText ? Icons.visibility_off : Icons.visibility,
+          color: theme.colorScheme.onSurfaceVariant,
         ),
-        if (widget.errorText != null) ...[
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              widget.errorText!,
-              style: TextStyle(
-                color: theme.colorScheme.error,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+        onPressed: _togglePasswordVisibility,
+      );
+    }
+
+    return TextFormField(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      initialValue: widget.controller == null ? widget.initialValue : null,
+      obscureText: _obscureText,
+      enabled: widget.enabled,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      maxLines: widget.maxLines,
+      maxLength: widget.maxLength,
+      onChanged: widget.onChanged,
+      onFieldSubmitted: widget.onSubmitted,
+      onTap: widget.onTap,
+      validator: widget.validator,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        errorText: widget.errorText,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: effectiveSuffixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: theme.colorScheme.outline,
           ),
-        ],
-      ],
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: theme.colorScheme.primary,
+            width: 2.0,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: theme.colorScheme.error,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: theme.colorScheme.error,
+            width: 2.0,
+          ),
+        ),
+        filled: true,
+        fillColor: widget.enabled ? theme.colorScheme.surface : theme.colorScheme.surfaceContainerHighest,
+      ),
     );
   }
 }

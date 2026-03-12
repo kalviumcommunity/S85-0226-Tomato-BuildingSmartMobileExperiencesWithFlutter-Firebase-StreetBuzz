@@ -1,118 +1,146 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/user_model.dart';
+import '../models/order_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Collection references
-  CollectionReference get usersCollection => _db.collection('users');
-  CollectionReference get ordersCollection => _db.collection('orders');
-
-  // ==================== USER OPERATIONS ====================
-
-  // Create or update user data
-  Future<void> addUserData(String uid, Map<String, dynamic> data) async {
+  // User operations
+  Future<void> saveUser(UserModel user) async {
     try {
-      await usersCollection.doc(uid).set(data, SetOptions(merge: true));
+      await _db.collection('users').doc(user.uid).set(user.toMap());
     } catch (e) {
-      throw Exception('Error adding user data: $e');
+      throw 'Failed to save user: ${e.toString()}';
     }
   }
 
-  // Get user data
-  Future<DocumentSnapshot> getUserData(String uid) async {
+  Future<UserModel?> getUser(String uid) async {
     try {
-      return await usersCollection.doc(uid).get();
+      final DocumentSnapshot doc = await _db.collection('users').doc(uid).get();
+      if (doc.exists) {
+        return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+      }
+      return null;
     } catch (e) {
-      throw Exception('Error getting user data: $e');
+      throw 'Failed to get user: ${e.toString()}';
     }
   }
 
-  // Update user data
-  Future<void> updateUserData(String uid, Map<String, dynamic> data) async {
+  Future<void> updateUser(UserModel user) async {
     try {
-      await usersCollection.doc(uid).update(data);
+      await _db.collection('users').doc(user.uid).update(user.toMap());
     } catch (e) {
-      throw Exception('Error updating user data: $e');
+      throw 'Failed to update user: ${e.toString()}';
     }
   }
 
-  // Delete user data
-  Future<void> deleteUserData(String uid) async {
+  // Order operations
+  Future<String> createOrder(OrderModel order) async {
     try {
-      await usersCollection.doc(uid).delete();
+      final DocumentReference docRef = await _db.collection('orders').add(order.toMap());
+      return docRef.id;
     } catch (e) {
-      throw Exception('Error deleting user data: $e');
+      throw 'Failed to create order: ${e.toString()}';
     }
   }
 
-  // ==================== ORDER OPERATIONS ====================
-
-  // Create a new order
-  Future<DocumentReference> createOrder(Map<String, dynamic> orderData) async {
+  Future<void> updateOrder(OrderModel order) async {
     try {
-      return await ordersCollection.add({
-        ...orderData,
-        'createdAt': FieldValue.serverTimestamp(),
-        'status': 'pending',
-      });
+      await _db.collection('orders').doc(order.id).update(order.toMap());
     } catch (e) {
-      throw Exception('Error creating order: $e');
+      throw 'Failed to update order: ${e.toString()}';
     }
   }
 
-  // Get orders for a specific user
-  Stream<QuerySnapshot> getUserOrders(String userId) {
-    try {
-      return ordersCollection
-          .where('userId', isEqualTo: userId)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    } catch (e) {
-      throw Exception('Error getting user orders: $e');
-    }
-  }
-
-  // Get all orders (for vendors)
-  Stream<QuerySnapshot> getAllOrders() {
-    try {
-      return ordersCollection
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    } catch (e) {
-      throw Exception('Error getting all orders: $e');
-    }
-  }
-
-  // Update order status
-  Future<void> updateOrderStatus(String orderId, String status) async {
-    try {
-      await ordersCollection.doc(orderId).update({
-        'status': status,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      throw Exception('Error updating order status: $e');
-    }
-  }
-
-  // Delete an order
   Future<void> deleteOrder(String orderId) async {
     try {
-      await ordersCollection.doc(orderId).delete();
+      await _db.collection('orders').doc(orderId).delete();
     } catch (e) {
-      throw Exception('Error deleting order: $e');
+      throw 'Failed to delete order: ${e.toString()}';
     }
   }
 
-  // ==================== REAL-TIME LISTENERS ====================
-
-  // Listen to user data changes
-  Stream<DocumentSnapshot> listenToUserData(String uid) {
-    return usersCollection.doc(uid).snapshots();
+  Stream<List<OrderModel>> getUserOrders(String userId) {
+    return _db
+        .collection('orders')
+        .where('customerId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => OrderModel.fromMap(doc.data()))
+            .toList());
   }
 
-  // Listen to specific order changes
-  Stream<DocumentSnapshot> listenToOrder(String orderId) {
-    return ordersCollection.doc(orderId).snapshots();
+  Stream<List<OrderModel>> getAllOrders() {
+    return _db
+        .collection('orders')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => OrderModel.fromMap(doc.data()))
+            .toList());
+  }
+
+  Stream<OrderModel?> getOrderStream(String orderId) {
+    return _db
+        .collection('orders')
+        .doc(orderId)
+        .snapshots()
+        .map((snapshot) => snapshot.exists
+            ? OrderModel.fromMap(snapshot.data() as Map<String, dynamic>)
+            : null);
+  }
+
+  Future<OrderModel?> getOrder(String orderId) async {
+    try {
+      final DocumentSnapshot doc = await _db.collection('orders').doc(orderId).get();
+      if (doc.exists) {
+        return OrderModel.fromMap(doc.data()! as Map<String, dynamic>);
+      }
+      return null;
+    } catch (e) {
+      throw 'Failed to get order: ${e.toString()}';
+    }
+  }
+
+  // Vendor operations
+  Stream<List<OrderModel>> getVendorOrders(String vendorId) {
+    return _db
+        .collection('orders')
+        .where('vendorId', isEqualTo: vendorId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => OrderModel.fromMap(doc.data()))
+            .toList());
+  }
+
+  // Analytics
+  Future<Map<String, int>> getOrderStats(String userId) async {
+    try {
+      final QuerySnapshot snapshot = await _db
+          .collection('orders')
+          .where('customerId', isEqualTo: userId)
+          .get();
+
+      final Map<String, int> stats = {
+        'total': snapshot.docs.length,
+        'pending': 0,
+        'preparing': 0,
+        'ready': 0,
+        'completed': 0,
+        'cancelled': 0,
+      };
+
+      for (final doc in snapshot.docs) {
+        final order = OrderModel.fromMap(doc.data()! as Map<String, dynamic>);
+        final status = order.status.toString().split('.').last;
+        stats[status] = (stats[status] ?? 0) + 1;
+      }
+
+      return stats;
+    } catch (e) {
+      throw 'Failed to get order stats: ${e.toString()}';
+    }
   }
 }
